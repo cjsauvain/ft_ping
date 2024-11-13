@@ -1,69 +1,93 @@
 #include "ft_ping.h"
 
-struct icmphdr	*create_icmp_packet(void)
+static unsigned short	process_checksum(unsigned short *icmphdr, int icmphdr_len)
 {
-	struct icmphdr	*icmp = malloc(sizeof(struct icmphdr *));;
+	unsigned short	sum = 0;
 
-	if (!icmp)
-		return (NULL);
-	icmp->type = 8;
-	icmp->code = 0;
-	icmp->checksum = 0;
-	icmp->un.echo.id = htons(getpid());
-	icmp->un.echo.sequence = 0;
+	while (icmphdr_len > 1)
+	{
+		sum += *icmphdr++;
+		icmphdr_len -= 2;
+	}
+	if (icmphdr_len)
+		sum += *icmphdr;
+	sum = (sum & 0xffff) + (sum >> 16);
+	sum += (sum >> 16);
+	return ~sum;
+}
+
+static struct icmphdr	create_icmp_packet(void)
+{
+	struct icmphdr	icmp;
+	int				icmp_len;
+
+	icmp.type = 8;
+	icmp.code = 0;
+	icmp.checksum = 0;
+	icmp.un.echo.id = getpid();
+	icmp.un.echo.sequence = 0;
+
+	icmp_len = sizeof(struct icmphdr);
+	icmp.checksum = process_checksum((unsigned short *)&icmp, icmp_len);
 	
 	return (icmp);
 }
 
-unsigned short	process_checksum(unsigned short *icmphdr, int icmphdr_len)
+static struct sockaddr_in	initialize_addr(void)
 {
-	uint16_t	sum = 0;
+	struct sockaddr_in	addr;
 
-	while (icmphdr_len > 1)
-	{
-		sum += ntohs(*(icmphdr++));
-		icmphdr_len -= 2;
-	}
-	if (icmphdr_len)
-		sum += ntohs(*icmphdr);
-	while (sum >> 16)
-		sum = ntohs((sum & 0xffff) + (sum >> 16));
-	return (htons(~sum));
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+	return addr;
 }
 
-int	ft_ping(t_command command)
+static void	send_echo_request(int fd_socket, struct sockaddr_in *addr, struct icmphdr *icmp)
 {
-	(void)command;
-	int					fd_socket;
-	struct icmphdr		*icmp;
-	char				buffer[48];
-	char				data[] ="\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !\"#$%&'";
-	char				*p = buffer;
-	struct sockaddr_in	addr;
-	size_t				icmp_len;
-	int					i = 0;
+	char	buffer[56];
+
+	memcpy(buffer, icmp, sizeof(struct icmphdr));
+	sendto(fd_socket, buffer, 56, 0, (struct sockaddr *)addr, sizeof(*addr));
+}
+
+static void	receive_echo_reply(int fd_socket, struct sockaddr_in *addr)
+{
+	socklen_t	addr_len;
+	char		buffer[56];
+
+	addr_len = sizeof(addr);
+	if (recvfrom(fd_socket, buffer, 56, 0, (struct sockaddr *)addr, &addr_len) == -1)
+		printf("Could not receive packet\n");
+}
+
+static int	create_socket(void)
+{
+	int	fd_socket;
 
 	fd_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (fd_socket == -1)
 	{
 		fprintf(stderr, "Could not create socket...\n");
-		return (-1);
+		exit(1);
 	}
-	memset(&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	return fd_socket;
+}
+
+int	ft_ping(t_command command)
+{
+	int					fd_socket;
+	struct icmphdr		icmp;
+	struct sockaddr_in	addr;
+
+	fd_socket = create_socket();
+	addr = initialize_addr();
 	icmp = create_icmp_packet();
-	if (!icmp)
-		return (-1);
-	p += sizeof(icmp);
-	*(p++) = data[i++];
-	while (data[i])
-		*(p++) = data[i++];
-	icmp_len = sizeof(icmp);
-	memcpy(buffer, icmp, icmp_len);
-	icmp->checksum = process_checksum((unsigned short *)icmp, sizeof(icmp));
-	memcpy(buffer, icmp, icmp_len);
-	sendto(fd_socket, buffer, 48, 0, (const struct sockaddr *)&addr, sizeof(addr));
-	//recvfrom(fd_socket, buffer, 2000, 0, (const struct sockaddr *)addr, sizeof(addr));
+	send_echo_request(fd_socket, &addr, &icmp);
+	receive_echo_reply(fd_socket, &addr);
+
+	(void)command;
+
 	return (0);
 }

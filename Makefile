@@ -1,8 +1,8 @@
 NAME = ft_ping
 
-SRC =	main.c		\
-		parsing.c	\
+SRC	=	parsing.c	\
 		ft_ping.c	\
+		main.c		\
 
 HEADERS = include/ft_ping.h
 
