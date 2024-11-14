@@ -9,10 +9,10 @@ static unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_
 		sum += *icmp_buffer++;
 		icmphdr_len -= 2;
 	}
-	if (icmphdr_len)
-		sum += *icmp_buffer;
-	sum = (sum & 0xffff) + (sum >> 16);
-	sum += (sum >> 16);
+	if (icmphdr_len > 0)
+		sum += *(unsigned char *)icmp_buffer;
+	while (sum >> 16)
+		sum = (sum & 0xffff) + (sum >> 16);
 	return ~sum;
 }
 
