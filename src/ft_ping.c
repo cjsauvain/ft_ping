@@ -1,16 +1,16 @@
 #include "ft_ping.h"
 
-static unsigned short	process_checksum(unsigned short *icmphdr, int icmphdr_len)
+static unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_len)
 {
 	unsigned short	sum = 0;
 
 	while (icmphdr_len > 1)
 	{
-		sum += *icmphdr++;
+		sum += *icmp_buffer++;
 		icmphdr_len -= 2;
 	}
 	if (icmphdr_len)
-		sum += *icmphdr;
+		sum += *icmp_buffer;
 	sum = (sum & 0xffff) + (sum >> 16);
 	sum += (sum >> 16);
 	return ~sum;
@@ -19,16 +19,12 @@ static unsigned short	process_checksum(unsigned short *icmphdr, int icmphdr_len)
 static struct icmphdr	create_icmp_packet(void)
 {
 	struct icmphdr	icmp;
-	int				icmp_len;
 
 	icmp.type = 8;
 	icmp.code = 0;
 	icmp.checksum = 0;
 	icmp.un.echo.id = getpid();
 	icmp.un.echo.sequence = 0;
-
-	icmp_len = sizeof(struct icmphdr);
-	icmp.checksum = process_checksum((unsigned short *)&icmp, icmp_len);
 	
 	return (icmp);
 }
@@ -46,9 +42,13 @@ static struct sockaddr_in	initialize_addr(void)
 
 static void	send_echo_request(int fd_socket, struct sockaddr_in *addr, struct icmphdr *icmp)
 {
-	char	buffer[56];
+	char			buffer[56];
+	unsigned short	checksum;
 
 	memcpy(buffer, icmp, sizeof(struct icmphdr));
+	checksum = process_checksum((unsigned short *)buffer, sizeof(struct icmphdr) + 48);
+	*(buffer + 2) = checksum & 0xFF;
+	*(buffer + 3) = checksum >> 8;
 	sendto(fd_socket, buffer, 56, 0, (struct sockaddr *)addr, sizeof(*addr));
 }
 
