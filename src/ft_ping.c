@@ -2,8 +2,10 @@
 
 static unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_len)
 {
-	unsigned short	sum = 0;
+	unsigned int	sum;
+	unsigned short	checksum;
 
+	sum = 0;
 	while (icmphdr_len > 1)
 	{
 		sum += *icmp_buffer++;
@@ -13,7 +15,9 @@ static unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_
 		sum += *(unsigned char *)icmp_buffer;
 	while (sum >> 16)
 		sum = (sum & 0xffff) + (sum >> 16);
-	return ~sum;
+
+	checksum = ~sum;
+	return checksum;
 }
 
 static struct icmphdr	create_icmp_packet(void)

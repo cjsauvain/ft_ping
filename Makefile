@@ -14,13 +14,13 @@ OBJS_PATH = objects/
 
 OBJ = $(SRCS:%.c=$(OBJS_PATH)%.o)
 
-OBJS = $(subst objects/,,$(OBJ))
+OBJS = $(subst src/,,$(OBJ))
 
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -g
 
-$(OBJS_PATH)%.o: %.c $(HEADERS)
+$(OBJS_PATH)%.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDER) -c $< -o $(subst src/,,$@)
 
 all: $(NAME)
@@ -28,7 +28,7 @@ all: $(NAME)
 objects:
 	@mkdir $(OBJS_PATH)
 
-$(NAME): objects $(OBJS)
+$(NAME): objects $(OBJ) $(HEADERS)
 	$(CC) $(OBJS) $(INCLUDE_FOLDER) -o $(NAME)
 
 clean:
