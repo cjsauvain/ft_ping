@@ -25,7 +25,6 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
 INCLUDE_FOLDER = -I $(INC_DIR)
 
-
 #Rules
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADERS)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDER) -c $< -o $@
