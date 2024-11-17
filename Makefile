@@ -1,38 +1,46 @@
+#Executable Name
 NAME = ft_ping
 
-SRC	=	parsing.c	\
-		ft_ping.c	\
-		main.c		\
+#Directories
+SRCS_DIR = srcs/
+OBJS_DIR = objects/
+INC_DIR  = include/
 
-HEADERS = include/ft_ping.h
+#Sources / Headers
+SRC	=	main.c					\
+		parsing.c				\
+		ft_ping.c				\
+		process_checksum.c		\
+		send_echo_request.c		\
+		receive_echo_reply.c	\
 
-INCLUDE_FOLDER = -I include/
+SRCS =	$(addprefix $(SRCS_DIR), $(SRC))
+HEADERS = $(INC_DIR)ft_ping.h
 
-SRCS =	$(addprefix src/, $(SRC))
+#Objects
+OBJS = $(subst $(SRCS_DIR),,$(SRCS:%.c=$(OBJS_DIR)%.o))
+#OBJS = $(subst $(SRCS_DIR),,$(OBJ))
 
-OBJS_PATH = objects/
-
-OBJ = $(SRCS:%.c=$(OBJS_PATH)%.o)
-
-OBJS = $(subst src/,,$(OBJ))
-
+#Compilation
 CC = gcc
-
 CFLAGS = -Wall -Wextra -Werror -g
+INCLUDE_FOLDER = -I $(INC_DIR)
 
-$(OBJS_PATH)%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDER) -c $< -o $(subst src/,,$@)
+
+#Rules
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADERS)
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDER) -c $< -o $@
 
 all: $(NAME)
 
-objects:
-	@mkdir $(OBJS_PATH)
+$(OBJS_DIR):
+	@mkdir $(OBJS_DIR)
 
-$(NAME): objects $(OBJ) $(HEADERS)
+$(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(INCLUDE_FOLDER) -o $(NAME)
 
 clean:
-	rm -rf $(OBJS_PATH)
+	rm -rf $(OBJS_DIR)
 
 fclean: clean
 	rm -rf $(NAME)
