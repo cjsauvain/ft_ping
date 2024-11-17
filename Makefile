@@ -19,7 +19,6 @@ HEADERS = $(INC_DIR)ft_ping.h
 
 #Objects
 OBJS = $(subst $(SRCS_DIR),,$(SRCS:%.c=$(OBJS_DIR)%.o))
-#OBJS = $(subst $(SRCS_DIR),,$(OBJ))
 
 #Compilation
 CC = gcc

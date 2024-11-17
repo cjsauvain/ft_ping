@@ -1,0 +1,17 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+create_icmp_packet	srcs/ft_ping.c	/^static struct icmphdr	create_icmp_packet(void)$/;"	f	file:
+create_socket	srcs/ft_ping.c	/^static int	create_socket(void)$/;"	f	file:
+ft_ping	srcs/ft_ping.c	/^int	ft_ping(t_command command)$/;"	f
+get_option	srcs/parsing.c	/^t_command	get_option(t_command command, char *argument)$/;"	f
+initialize_addr	srcs/ft_ping.c	/^static struct sockaddr_in	initialize_addr(void)$/;"	f	file:
+main	srcs/main.c	/^int	main(int argc, char **argv)$/;"	f
+parsing	srcs/parsing.c	/^t_command	parsing(int argc, char **argv)$/;"	f
+prepare_buffer	srcs/send_echo_request.c	/^static void	prepare_buffer(struct icmphdr *icmp, char *buffer)$/;"	f	file:
+process_checksum	srcs/process_checksum.c	/^unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_len)$/;"	f
+receive_echo_reply	srcs/receive_echo_reply.c	/^void	receive_echo_reply(int fd_socket, struct sockaddr_in *addr)$/;"	f
+send_echo_request	srcs/send_echo_request.c	/^void	send_echo_request(int fd_socket, struct sockaddr_in *addr, struct icmphdr *icmp)$/;"	f

@@ -12,6 +12,11 @@ void	receive_echo_reply(int fd_socket, struct sockaddr_in *addr)
 		fprintf(stderr, "Could not receive packet...\n");
 		exit(1);
 	}
+	if (recvfrom(fd_socket, buffer, 1500, 0, (struct sockaddr *)addr, &addr_len) == -1)
+	{
+		fprintf(stderr, "Could not receive packet...\n");
+		exit(1);
+	}
 	/*
 	icmp_reply = (struct icmphdr *)(buffer);
 	printf("type = %02x\n", icmp_reply->type);
