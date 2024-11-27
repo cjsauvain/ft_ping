@@ -10,10 +10,10 @@ static void	prepare_buffer(struct icmphdr *icmp, char *buffer)
 	*(buffer + 3) = checksum >> 8;
 }
 
-void	send_echo_request(int fd_socket, struct sockaddr_in *addr, struct icmphdr *icmp)
+void	send_echo_request(int fd_socket, struct sockaddr_in *dest_addr, struct icmphdr *icmp)
 {
 	char			buffer[56];
 
 	prepare_buffer(icmp, buffer);
-	sendto(fd_socket, buffer, 56, 0, (struct sockaddr *)addr, sizeof(*addr));
+	sendto(fd_socket, buffer, 56, 0, (struct sockaddr *)dest_addr, sizeof(*dest_addr));
 }

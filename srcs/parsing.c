@@ -6,8 +6,7 @@ t_command	get_option(t_command command, char *argument)
 
 	while (argument[i])
 	{
-		if ((argument[i] != 'v' && argument[i] != '?')
-			|| argument[0] != '-')
+		if ((argument[i] != 'v' && argument[i] != '?') || argument[0] != '-')
 		{
 			command.status = 64;
 			fprintf(stderr, "ping: invalid option -- '%c'\nTry 'ping --help' or 'ping --usage' for more information.", argument[i]);
@@ -29,11 +28,8 @@ t_command	get_option(t_command command, char *argument)
 t_command	parsing(int argc, char **argv)
 {
 	t_command	command;
-	int			i = 1;
+	int			i;
 
-	command.status = 0;
-	command.option[0] = '0';
-	command.option[1] = '\0';
 	if (argc == 1)
 	{
 		command.status = 64;
@@ -41,11 +37,14 @@ t_command	parsing(int argc, char **argv)
 		return (command);
 	}
 	//print help:	- if encounter ? without having invalid options placed BEFORE ("-v?" || "-v -?")
+	command.status = 0;
+	command.option[0] = '0';
+	command.option[1] = '\0';
+	i = 1;
 	while (argv[i])
 	{
-		if (strchr(argv[i], '-')
-			&& (command.option[0] == '0'
-				|| command.option[0] == 'v'))
+		if (strchr(argv[i], '-') && (command.option[0] == '0' 
+			|| command.option[0] == 'v'))
 			command = get_option(command, argv[i]);
 		else if (!strchr(argv[i], '-'))
 			command.ip_addr = argv[i];

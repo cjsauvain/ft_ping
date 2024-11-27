@@ -5,7 +5,7 @@ static void	set_sock_opt(int fd_socket)
 	struct timeval		tv_exit;
 	struct icmp_filter	filter;
 
-	tv_exit.tv_sec = 1;
+	tv_exit.tv_sec = 3;
 	tv_exit.tv_usec = 0;
 	if (setsockopt(fd_socket, SOL_SOCKET, SO_RCVTIMEO, &tv_exit, sizeof(tv_exit)) == -1)
 	{
