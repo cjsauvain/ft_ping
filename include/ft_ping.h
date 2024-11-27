@@ -6,7 +6,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/socket.h>
-# include <netinet/ip_icmp.h>
+#include <linux/icmp.h>
 # include <arpa/inet.h>
 
 typedef struct s_command {
@@ -20,5 +20,8 @@ int				ft_ping(t_command command);
 unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_len);
 void			send_echo_request(int fd_socket, struct sockaddr_in *addr, struct icmphdr *icmp);
 void			receive_echo_reply(int fd_socket, struct sockaddr_in *addr);
+int				create_socket(void);
+struct 			sockaddr_in	initialize_addr(void);
+struct icmphdr	create_icmp_packet(void);
 
 #endif

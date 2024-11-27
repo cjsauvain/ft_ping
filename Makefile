@@ -13,6 +13,9 @@ SRC	=	main.c					\
 		process_checksum.c		\
 		send_echo_request.c		\
 		receive_echo_reply.c	\
+		create_icmp_packet.c	\
+		create_socket.c			\
+		initialize_addr.c		\
 
 SRCS =	$(addprefix $(SRCS_DIR), $(SRC))
 HEADERS = $(INC_DIR)ft_ping.h
