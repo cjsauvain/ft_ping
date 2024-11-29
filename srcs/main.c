@@ -2,11 +2,8 @@
 
 int	main(int argc, char **argv)
 {
-	t_command	command;
+	int	status;
 
-	command = parsing(argc, argv);	
-	if (command.status)
-		return (command.status);
-	command.status = ft_ping(command);
-	return command.status;	
+	status = ft_ping(argc, argv);
+	return status;	
 }

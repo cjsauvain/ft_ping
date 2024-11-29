@@ -28,7 +28,7 @@ int	create_socket(void)
 	fd_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (fd_socket == -1)
 	{
-		fprintf(stderr, "Could not create socket...\n");
+		fprintf(stderr, "ft_ping: Lacking privilege for icmp socket...\n");
 		exit(1);
 	}
 	set_sock_opt(fd_socket);

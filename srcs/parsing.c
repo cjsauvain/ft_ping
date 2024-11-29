@@ -8,9 +8,10 @@ t_command	get_option(t_command command, char *argument)
 	{
 		if ((argument[i] != 'v' && argument[i] != '?') || argument[0] != '-')
 		{
-			command.status = 64;
-			fprintf(stderr, "ping: invalid option -- '%c'\nTry 'ping --help' or 'ping --usage' for more information.", argument[i]);
-			return (command);
+			fprintf(stderr, "ping: invalid option -- '%c'\n", argument[i]);
+			fprintf(stderr, "Try 'ping --help' or 'ping --usage' \
+					for more information.\n");
+			exit(64);
 		}
 		else
 		{
@@ -18,11 +19,11 @@ t_command	get_option(t_command command, char *argument)
 				command.option[0] = '?';
 			else
 				command.option[0] = 'v';
-			break;
+			return command;
 		}
 		i++;
 	}
-	return (command);
+	return command;
 }
 
 t_command	parsing(int argc, char **argv)
@@ -32,12 +33,11 @@ t_command	parsing(int argc, char **argv)
 
 	if (argc == 1)
 	{
-		command.status = 64;
-		fprintf(stderr, "ft_ping: missing host operand\nTry 'ping -?' for more information.\n");
-		return (command);
+		fprintf(stderr, "ft_ping: missing host operand\n");
+		fprintf(stderr, "Try 'ping -?' for more information.\n");
+		exit(64);
 	}
 	//print help:	- if encounter ? without having invalid options placed BEFORE ("-v?" || "-v -?")
-	command.status = 0;
 	command.option[0] = '0';
 	command.option[1] = '\0';
 	i = 1;
@@ -48,9 +48,7 @@ t_command	parsing(int argc, char **argv)
 			command = get_option(command, argv[i]);
 		else if (!strchr(argv[i], '-'))
 			command.ip_addr = argv[i];
-		if (command.status)
-			break;
 		i++;
 	}
-	return (command);
+	return command;
 }
