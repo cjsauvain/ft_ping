@@ -1,29 +1,30 @@
 #include "ft_ping.h"
 
-t_command	get_option(t_command command, char *argument)
+static void	display_error_message(void)
+{
+	fprintf(stderr, "ft_ping: missing host operand\n");
+	fprintf(stderr, "Try 'ping -?' for more information.\n");
+	exit(64);
+}
+
+static void	display_help(void)
+{
+	//display_help;
+	exit(0);
+}
+
+static void	get_option(t_command *command, char *option)
 {
 	int	i = 1;
 
-	while (argument[i])
+	while (option[i])
 	{
-		if ((argument[i] != 'v' && argument[i] != '?') || argument[0] != '-')
-		{
-			fprintf(stderr, "ping: invalid option -- '%c'\n", argument[i]);
-			fprintf(stderr, "Try 'ping --help' or 'ping --usage' \
-					for more information.\n");
-			exit(64);
-		}
+		if (option[i] != 'v')
+			display_error_message();
 		else
-		{
-			if (argument[i] == '?')
-				command.option[0] = '?';
-			else
-				command.option[0] = 'v';
-			return command;
-		}
+			command->option[0] = 'v';
 		i++;
 	}
-	return command;
 }
 
 t_command	parsing(int argc, char **argv)
@@ -32,22 +33,17 @@ t_command	parsing(int argc, char **argv)
 	int			i;
 
 	if (argc == 1)
-	{
-		fprintf(stderr, "ft_ping: missing host operand\n");
-		fprintf(stderr, "Try 'ping -?' for more information.\n");
-		exit(64);
-	}
-	//print help:	- if encounter ? without having invalid options placed BEFORE ("-v?" || "-v -?")
+		display_error_message();
 	command.option[0] = '0';
 	command.option[1] = '\0';
 	i = 1;
 	while (argv[i])
 	{
-		if (strchr(argv[i], '-') && (command.option[0] == '0' 
-			|| command.option[0] == 'v'))
-			command = get_option(command, argv[i]);
-		else if (!strchr(argv[i], '-'))
-			command.ip_addr = argv[i];
+		if (argv[i][0] == '-' && argv[i][1] == '?')
+			display_help();
+		else if (argv[i][0] == '-')
+			get_option(&command, argv[i]);
+		command.addr = update_addr_list(command.addr, argv[i]);
 		i++;
 	}
 	return command;
