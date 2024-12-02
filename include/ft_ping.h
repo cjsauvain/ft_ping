@@ -35,7 +35,7 @@ void				receive_echo_reply(int fd_socket, \
 						struct sockaddr_in *dest_addr, \
 						struct timeval tv_request);
 int					create_socket(void);
-struct sockaddr_in	initialize_addr(char *ipv4_addr);
+struct sockaddr_in	initialize_addr(char *addr);
 struct icmphdr		create_icmp_packet(void);
 void				display_reply(struct iphdr *ip_pckt, \
 						struct icmphdr *icmp_pckt, \
