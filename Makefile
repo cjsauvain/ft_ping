@@ -8,7 +8,6 @@ INC_DIR  = include
 
 #Sources / Headers
 SRC	=	main.c				\
-		parsing.c			\
 		ft_ping.c			\
 		process_checksum.c	\
 
@@ -21,9 +20,13 @@ SRC_RECEIVING =	receive_echo_reply.c	\
 				display_reply.c			\
 				check_checksum_reply.c	\
 
+SRC_PARSING =	parsing.c			\
+				update_addr_list.c	\
+
 SRCS =	$(addprefix $(SRCS_DIR)/, $(SRC))						\
 		$(addprefix $(SRCS_DIR)/sending/, $(SRC_SENDING))		\
 		$(addprefix $(SRCS_DIR)/receiving/, $(SRC_RECEIVING))	\
+		$(addprefix $(SRCS_DIR)/parsing/, $(SRC_PARSING))	\
 
 HEADERS = $(INC_DIR)/ft_ping.h
 
@@ -42,7 +45,9 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(HEADERS)
 all: $(NAME)
 
 $(OBJS_DIR):
-	@mkdir -p $(OBJS_DIR)/sending $(OBJS_DIR)/receiving
+	@mkdir -p	$(OBJS_DIR)/sending 	\
+				$(OBJS_DIR)/receiving	\
+				$(OBJS_DIR)/parsing		\
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(INC_FOLDER) -o $(NAME)

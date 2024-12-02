@@ -21,7 +21,7 @@ typedef enum e_addr_format {
 
 typedef struct s_command {
 	int		status;
-	char	**ipv4_addr;
+	char	**addr;
 	char	option[2];
 }	t_command;
 

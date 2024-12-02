@@ -27,6 +27,13 @@ static void	get_option(t_command *command, char *option)
 	}
 }
 
+static void	initialize_command(t_command *command)
+{
+	command->addr = NULL;
+	command->option[0] = '0';
+	command->option[1] = '\0';
+}
+
 t_command	parsing(int argc, char **argv)
 {
 	t_command	command;
@@ -34,8 +41,7 @@ t_command	parsing(int argc, char **argv)
 
 	if (argc == 1)
 		display_error_message();
-	command.option[0] = '0';
-	command.option[1] = '\0';
+	initialize_command(&command);
 	i = 1;
 	while (argv[i])
 	{
@@ -43,7 +49,8 @@ t_command	parsing(int argc, char **argv)
 			display_help();
 		else if (argv[i][0] == '-')
 			get_option(&command, argv[i]);
-		command.addr = update_addr_list(command.addr, argv[i]);
+		else
+			command.addr = update_addr_list(command.addr, argv[i]);
 		i++;
 	}
 	return command;

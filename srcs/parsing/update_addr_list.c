@@ -5,6 +5,8 @@ static int	get_list_length(char **list)
 	int	i;
 
 	i = 0;
+	if (!list)
+		return 0;
 	while (list[i])
 		i++;
 	return i;
@@ -19,6 +21,8 @@ static char	**allocate_memory(char **list)
 	if (!list)
 		list_len++;
 	new_list = realloc(list, (list_len + 1) * sizeof(char *));
+	if (!list)
+		new_list[0] = NULL;
 	return new_list;
 }
 
@@ -37,4 +41,6 @@ char	**update_addr_list(char **list, char *new_addr)
 {
 	list = allocate_memory(list);
 	update_list(list, new_addr);
+
+	return list;
 }
