@@ -20,7 +20,7 @@ static struct iphdr	*recv_ip_pckt(int fd_socket, struct sockaddr_in *dest_addr, 
 }
 
 void	receive_echo_reply(int fd_socket, struct sockaddr_in *dest_addr, \
-			struct timeval tv_request)
+			struct timeval tv_request, int *received_pckt)
 {
 	struct iphdr	*ip_reply;
 	struct icmphdr	*icmp_reply;
@@ -31,4 +31,5 @@ void	receive_echo_reply(int fd_socket, struct sockaddr_in *dest_addr, \
 	if (check_checksum_reply(icmp_reply))
 		return ;
 	display_reply(ip_reply, icmp_reply, tv_request, tv_reply);
+	(*received_pckt)++;
 }

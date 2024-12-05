@@ -16,7 +16,7 @@ static struct timeval	prepare_buffer(struct icmphdr *icmp, char *buffer)
 }
 
 struct timeval	send_echo_request(int fd_socket, struct sockaddr_in *dest_addr, \
-			struct icmphdr *icmp)
+			struct icmphdr *icmp, int *sent_pckt)
 {
 	char			buffer[ICMP_PCKT_SIZE];
 	struct timeval	tv;
@@ -27,5 +27,6 @@ struct timeval	send_echo_request(int fd_socket, struct sockaddr_in *dest_addr, \
 		fprintf(stderr, "Could not send packet...\n");
 		exit(1);
 	}
+	(*sent_pckt)++;
 	return tv;
 }

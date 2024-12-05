@@ -7,9 +7,10 @@ OBJS_DIR = objects
 INC_DIR  = include
 
 #Sources / Headers
-SRC	=	main.c				\
-		ft_ping.c			\
-		process_checksum.c	\
+SRC	=	main.c					\
+		ft_ping.c				\
+		process_checksum.c		\
+		display_ping_stats.c	\
 
 SRC_SENDING =	send_echo_request.c		\
 				create_icmp_packet.c	\
@@ -23,10 +24,13 @@ SRC_RECEIVING =	receive_echo_reply.c	\
 SRC_PARSING =	parsing.c			\
 				update_addr_list.c	\
 
+SRC_SIGNAL =	handler.c	\
+
 SRCS =	$(addprefix $(SRCS_DIR)/, $(SRC))						\
 		$(addprefix $(SRCS_DIR)/sending/, $(SRC_SENDING))		\
 		$(addprefix $(SRCS_DIR)/receiving/, $(SRC_RECEIVING))	\
-		$(addprefix $(SRCS_DIR)/parsing/, $(SRC_PARSING))	\
+		$(addprefix $(SRCS_DIR)/parsing/, $(SRC_PARSING))		\
+		$(addprefix $(SRCS_DIR)/signal/, $(SRC_SIGNAL))			\
 
 HEADERS = $(INC_DIR)/ft_ping.h
 
@@ -48,14 +52,10 @@ $(OBJS_DIR):
 	@mkdir -p	$(OBJS_DIR)/sending 	\
 				$(OBJS_DIR)/receiving	\
 				$(OBJS_DIR)/parsing		\
+				$(OBJS_DIR)/signal		\
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(INC_FOLDER) -o $(NAME)
-	#if [ -e $(NAME) ]
-	#then
-	sudo chown root:root $(NAME)
-	sudo chmod u+s $(NAME)
-	#fi
 
 clean:
 	rm -rf $(OBJS_DIR)
