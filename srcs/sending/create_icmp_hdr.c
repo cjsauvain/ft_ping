@@ -1,6 +1,6 @@
 #include "ft_ping.h"
 
-struct icmphdr	create_icmp_packet(void)
+struct icmphdr	create_icmp_hdr(void)
 {
 	struct icmphdr	icmp;
 

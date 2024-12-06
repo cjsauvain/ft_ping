@@ -13,9 +13,8 @@ SRC	=	main.c					\
 		display_ping_stats.c	\
 
 SRC_SENDING =	send_echo_request.c		\
-				create_icmp_packet.c	\
+				create_icmp_hdr.c		\
 				create_socket.c			\
-				initialize_addr.c		\
 
 SRC_RECEIVING =	receive_echo_reply.c	\
 				display_reply.c			\
@@ -26,11 +25,17 @@ SRC_PARSING =	parsing.c			\
 
 SRC_SIGNAL =	handler.c	\
 
+SRC_DISPLAY =	display_usage_message.c	\
+				display_reply.c			\
+				display_ping_stats.c	\
+				display_data_sent.c		\
+
 SRCS =	$(addprefix $(SRCS_DIR)/, $(SRC))						\
 		$(addprefix $(SRCS_DIR)/sending/, $(SRC_SENDING))		\
 		$(addprefix $(SRCS_DIR)/receiving/, $(SRC_RECEIVING))	\
 		$(addprefix $(SRCS_DIR)/parsing/, $(SRC_PARSING))		\
 		$(addprefix $(SRCS_DIR)/signal/, $(SRC_SIGNAL))			\
+		$(addprefix $(SRCS_DIR)/display/, $(SRC_DISPLAY))		\
 
 HEADERS = $(INC_DIR)/ft_ping.h
 

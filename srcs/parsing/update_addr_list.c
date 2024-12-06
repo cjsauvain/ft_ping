@@ -1,46 +1,38 @@
 #include "ft_ping.h"
 
-static int	get_list_length(char **list)
+static struct sockaddr_in	get_addr_struct(char *addr)
 {
-	int	i;
+	struct addrinfo		hints, *res;
+	struct sockaddr_in	*addr_struct;
+	int					status;
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_RAW;
+	status = getaddrinfo(addr, NULL, &hints, &res);
+	if (status)
+	{
+		fprintf(stderr, "%s\n", gai_strerror(status));
+		exit(status);
+	}
+	addr_struct = (struct sockaddr_in *)res->ai_addr;
+	return *addr_struct;
+}
+
+struct sockaddr_in	*update_addr_list(char **argv, int addr_count)
+{
+	struct sockaddr_in	dest_addr_list[addr_count];
+	int					i;
+	int					j;
 
 	i = 0;
-	if (!list)
-		return 0;
-	while (list[i])
+	j = 0;
+	while (i < addr_count)
+	{
+		if (argv[i][0] != '-')
+			dest_addr_list[j++] = get_addr_struct(argv[i]);
 		i++;
-	return i;
-}
+	}
 
-static char	**allocate_memory(char **list)
-{
-	char	**new_list;
-	int		list_len;
-
-	list_len = get_list_length(list);
-	if (!list)
-		list_len++;
-	new_list = realloc(list, (list_len + 1) * sizeof(char *));
-	if (!list)
-		new_list[0] = NULL;
-	return new_list;
-}
-
-static void	update_list(char **list, char *new_addr)
-{
-	int	i;
-
-	i = 0;
-	while (list[i])
-		i++;
-	list[i] = new_addr;
-	list[i + 1] = NULL;
-}
-
-char	**update_addr_list(char **list, char *new_addr)
-{
-	list = allocate_memory(list);
-	update_list(list, new_addr);
-
-	return list;
+	return dest_addr_list;
 }

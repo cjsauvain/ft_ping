@@ -1,32 +1,29 @@
 #include "ft_ping.h"
 
-static struct timeval	prepare_buffer(struct icmphdr *icmp, char *buffer)
+static struct timeval	initialize_icmp_data(char *data)
 {
-	unsigned short	checksum;
 	struct timeval	tv;
 
-	memcpy(buffer, icmp, sizeof(struct icmphdr));
 	gettimeofday(&tv, NULL);
-	memcpy(buffer + sizeof(struct icmphdr), &tv, sizeof(tv));
-	checksum = process_checksum((unsigned short *)buffer, ICMP_PCKT_SIZE);
-	*(buffer + 2) = checksum & 0xFF;
-	*(buffer + 3) = checksum >> 8;
+	memcpy(data, &tv, sizeof(tv));
+	//randomly fill left data octets
 
 	return tv;
 }
 
-struct timeval	send_echo_request(int fd_socket, struct sockaddr_in *dest_addr, \
-			struct icmphdr *icmp, int *sent_pckt)
+struct void	send_echo_request(int fd_socket, t_ping *ping, int addr_index)
 {
-	char			buffer[ICMP_PCKT_SIZE];
-	struct timeval	tv;
+	struct sockaddr	*dest_addr;
 
-	tv = prepare_buffer(icmp, buffer);
-	if (sendto(fd_socket, buffer, ICMP_PCKT_SIZE, 0, (struct sockaddr *)dest_addr, sizeof(*dest_addr)) == - 1)
+	ping->tv_sent = initialize_icmp_data(ping->icmp_pckt.data);
+	ping->icmp_pckt.icmphdr.checksum = \
+				process_checksum((unsigned short *)&ping->icmp_pckt);
+	dest_addr = (struct sockaddr *)ping->dest_addr_list[addr_index];
+	if (sendto(fd_socket, &ping->icmp_pckt, ICMP_PCKT_SIZE, 0, \
+			dest_addr, sizeof(*dest_addr)) == - 1)
 	{
 		fprintf(stderr, "Could not send packet...\n");
 		exit(1);
 	}
-	(*sent_pckt)++;
-	return tv;
+	ping->stats.sent_pckt++;
 }
