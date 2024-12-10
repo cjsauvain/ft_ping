@@ -19,11 +19,10 @@ static t_ping	initialize_ping_struct(void)
 {
 	t_ping	ping;
 
-	memset(ping.icmp_pckt, 0, ICMP_HDR_SIZE);
+	memset(&ping.icmp_pckt, 0, ICMP_HDR_SIZE + ICMP_DATA_SIZE);
 	ping.dest_addr_list = NULL;
 	ping.stats.sent_pckt = 0;
 	ping.stats.received_pckt = 0;
-	memset(ping.data, 0, ICMP_DATA_SIZE);
 	ping.verbose_mode = false;
 
 	return ping;
@@ -35,8 +34,8 @@ t_ping	parsing(int argc, char **argv)
 	int		i;
 	int		addr_count;
 
-	if (argc == 1)// check for ip/hostname too
-		display_error_message();
+	if (argc == 1)
+		display_error_and_exit();
 	ping = initialize_ping_struct();
 	i = 1;
 	addr_count = 0;
@@ -52,7 +51,7 @@ t_ping	parsing(int argc, char **argv)
 	}
 	if (!addr_count)
 		display_error_and_exit();
-	ping.dest_addr_list = update_addr_list(argv[i], addr_count);
-	ping.dest_addr_list[addr_count] = NULL;
+	ping.dest_addr_count = addr_count;
+	ping.dest_addr_list = update_addr_list(argv + 1, addr_count);
 	return ping;
 }

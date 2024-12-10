@@ -21,6 +21,7 @@ static struct sockaddr_in	get_addr_struct(char *addr)
 
 struct sockaddr_in	*update_addr_list(char **argv, int addr_count)
 {
+	struct sockaddr_in	*p_dest_addr_list;
 	struct sockaddr_in	dest_addr_list[addr_count];
 	int					i;
 	int					j;
@@ -33,6 +34,6 @@ struct sockaddr_in	*update_addr_list(char **argv, int addr_count)
 			dest_addr_list[j++] = get_addr_struct(argv[i]);
 		i++;
 	}
-
-	return dest_addr_list;
+	p_dest_addr_list = dest_addr_list;
+	return p_dest_addr_list;
 }

@@ -22,12 +22,13 @@ static void	run_ping(t_ping *ping)
 
 	fd_socket = create_socket();
 	i = 0;
-	while (ping->dest_addr_list[i])
+	while (i < ping->dest_addr_count)
 	{
 		ping->icmp_pckt.icmphdr = create_icmp_hdr();
 		ping_loop(fd_socket, ping, i);
 		i++;
 	}
+	(void)ping;
 }
 
 int	ft_ping(int argc, char **argv)

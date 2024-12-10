@@ -27,11 +27,11 @@ void	receive_echo_reply(int fd_socket, t_ping *ping, int addr_index)
 	struct sockaddr	*dest_addr;
 	struct timeval	tv_reply;
 
-	dest_addr = (struct sockaddr *)ping->dest_addr_list[addr_index];
+	dest_addr = (struct sockaddr *)&ping->dest_addr_list[addr_index];
 	ip_reply = recv_ip_pckt(fd_socket, dest_addr, &tv_reply);
 	icmp_reply = (struct icmphdr *)((char *)ip_reply + 20);
 	if (check_checksum_reply(icmp_reply))
 		return ;
-	display_reply(ip_reply, icmp_reply, tv_request, tv_reply);
+	display_reply(ip_reply, icmp_reply, tv_reply, tv_reply);
 	ping->stats.received_pckt++;
 }

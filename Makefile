@@ -10,14 +10,12 @@ INC_DIR  = include
 SRC	=	main.c					\
 		ft_ping.c				\
 		process_checksum.c		\
-		display_ping_stats.c	\
 
 SRC_SENDING =	send_echo_request.c		\
 				create_icmp_hdr.c		\
 				create_socket.c			\
 
 SRC_RECEIVING =	receive_echo_reply.c	\
-				display_reply.c			\
 				check_checksum_reply.c	\
 
 SRC_PARSING =	parsing.c			\
@@ -58,6 +56,7 @@ $(OBJS_DIR):
 				$(OBJS_DIR)/receiving	\
 				$(OBJS_DIR)/parsing		\
 				$(OBJS_DIR)/signal		\
+				$(OBJS_DIR)/display		\
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(INC_FOLDER) -o $(NAME)

@@ -11,14 +11,14 @@ static struct timeval	initialize_icmp_data(char *data)
 	return tv;
 }
 
-struct void	send_echo_request(int fd_socket, t_ping *ping, int addr_index)
+void	send_echo_request(int fd_socket, t_ping *ping, int addr_index)
 {
 	struct sockaddr	*dest_addr;
 
 	ping->tv_sent = initialize_icmp_data(ping->icmp_pckt.data);
 	ping->icmp_pckt.icmphdr.checksum = \
 				process_checksum((unsigned short *)&ping->icmp_pckt);
-	dest_addr = (struct sockaddr *)ping->dest_addr_list[addr_index];
+	dest_addr = (struct sockaddr *)&ping->dest_addr_list[addr_index];
 	if (sendto(fd_socket, &ping->icmp_pckt, ICMP_PCKT_SIZE, 0, \
 			dest_addr, sizeof(*dest_addr)) == - 1)
 	{

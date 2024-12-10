@@ -40,6 +40,7 @@ typedef struct s_ping
 {
 	t_icmp_pckt			icmp_pckt;
 	struct sockaddr_in	*dest_addr_list;
+	int					dest_addr_count;
 	struct timeval		tv_sent;
 	t_ping_stats		stats;
 	bool				verbose_mode;
@@ -47,23 +48,24 @@ typedef struct s_ping
 
 t_ping				parsing(int argc, char **argv);
 int					ft_ping(int argc, char **argv);
-unsigned short		process_checksum(unsigned short *icmp_buffer, \
-						int icmphdr_len);
+unsigned short		process_checksum(unsigned short *icmp_pckt);
 void				send_echo_request(int fd_socket, t_ping *ping, \
 										int addr_index);
 void				receive_echo_reply(int fd_socket, t_ping *ping, \
 										int addr_index);
 int					create_socket(void);
 struct icmphdr		create_icmp_hdr(void);
+int					check_checksum_reply(struct icmphdr *icmp_pckt);
+struct sockaddr_in	*update_addr_list(char **argv, int addr_count);
+void				handler(int signum);
+
+/** Display **/
 void				display_reply(struct iphdr *ip_pckt, \
 						struct icmphdr *icmp_pckt, \
 						struct timeval tv_request, struct timeval tv_reply);
-int					check_checksum_reply(struct icmphdr *icmp_pckt);
-char				**update_addr_list(char **list, char *new_addr);
-void				handler(int signum);
 void    			display_ping_stats(int sent_pckt, int received_pckt);
-void    			display_error_message(void);
-void    			display_help(void);
+void    			display_error_and_exit(void);
+void    			display_help_and_exit(void);
 void				display_data_sent(struct sockaddr_in dest_addr, \
 										size_t icmp_pckt_size);
 

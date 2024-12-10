@@ -4,36 +4,30 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-allocate_memory	parsing/update_addr_list.c	/^static char	**allocate_memory(char **list)$/;"	f	file:
-check_addr_format	sending/initialize_addr.c	/^static t_addr_format	check_addr_format(char *addr)$/;"	f	file:
 check_checksum_reply	receiving/check_checksum_reply.c	/^int	check_checksum_reply(struct icmphdr *icmp_pckt)$/;"	f
-copy_icmp_into_buffer	sending/send_echo_request.c	/^static struct timeval	copy_icmp_into_buffer(struct icmphdr *icmp, char *buffer)$/;"	f	file:
-create_icmp_packet	sending/create_icmp_packet.c	/^struct icmphdr	create_icmp_packet(void)$/;"	f
+create_icmp_hdr	sending/create_icmp_hdr.c	/^struct icmphdr	create_icmp_hdr(void)$/;"	f
 create_socket	sending/create_socket.c	/^int	create_socket(void)$/;"	f
-display_data_sent	ft_ping.c	/^static void	display_data_sent(char *addr, size_t icmp_pckt_size)$/;"	f	file:
+display_data_sent	display/display_data_sent.c	/^void	display_data_sent(struct sockaddr_in dest_addr, size_t icmp_pckt_size)$/;"	f
 display_error_and_exit	display/display_usage_message.c	/^void	display_error_and_exit(void)$/;"	f
 display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_exit(void)$/;"	f
 display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(int sent_pckt, int received_pckt)$/;"	f
 display_reply	display/display_reply.c	/^void	display_reply(struct iphdr *ip_reply, struct icmphdr *icmp_reply, \\$/;"	f
 ft_ping	ft_ping.c	/^int	ft_ping(int argc, char **argv)$/;"	f
 g_sigint_triggered	main.c	/^bool	g_sigint_triggered = false;$/;"	v
-get_ipv4_format	sending/initialize_addr.c	/^static void	get_ipv4_format(char *addr, char *addr_buf)$/;"	f	file:
+get_addr_struct	parsing/update_addr_list.c	/^static struct sockaddr_in	get_addr_struct(char *addr)$/;"	f	file:
 get_latency	display/display_reply.c	/^static void	get_latency(char *latency_str, struct timeval tv_request, struct timeval tv_reply)$/;"	f	file:
-get_list_length	parsing/update_addr_list.c	/^static int	get_list_length(char **list)$/;"	f	file:
 get_ping_opt	parsing/parsing.c	/^static void	get_ping_opt(t_ping *ping, char *opt)$/;"	f	file:
 get_source_ip_addr	display/display_reply.c	/^static char	*get_source_ip_addr(unsigned int saddr)$/;"	f	file:
 handler	signal/handler.c	/^void	handler(int signum)$/;"	f
-initialize_addr	sending/initialize_addr.c	/^struct sockaddr_in	initialize_addr(char *addr, char *addr_buf)$/;"	f
+initialize_icmp_data	sending/send_echo_request.c	/^static struct timeval	initialize_icmp_data(char *data)$/;"	f	file:
 initialize_ping_struct	parsing/parsing.c	/^static t_ping	initialize_ping_struct(void)$/;"	f	file:
 main	main.c	/^int	main(int argc, char **argv)$/;"	f
 parsing	parsing/parsing.c	/^t_ping	parsing(int argc, char **argv)$/;"	f
-ping_loop	ft_ping.c	/^static void	ping_loop(int fd_socket, struct sockaddr_in *dest_addr, \\$/;"	f	file:
-prepare_buffer	sending/send_echo_request.c	/^static struct timeval	prepare_buffer(struct icmphdr *icmp, char *buffer)$/;"	f	file:
-process_checksum	process_checksum.c	/^unsigned short	process_checksum(unsigned short *icmp_buffer, int icmphdr_len)$/;"	f
-receive_echo_reply	receiving/receive_echo_reply.c	/^void	receive_echo_reply(int fd_socket, struct sockaddr_in *dest_addr, \\$/;"	f
-recv_ip_pckt	receiving/receive_echo_reply.c	/^static struct iphdr	*recv_ip_pckt(int fd_socket, struct sockaddr_in *dest_addr, \\$/;"	f	file:
-run_ping	ft_ping.c	/^static void	run_ping(t_ping ping)$/;"	f	file:
-send_echo_request	sending/send_echo_request.c	/^struct timeval	send_echo_request(int fd_socket, struct sockaddr_in *dest_addr, \\$/;"	f
+ping_loop	ft_ping.c	/^static void	ping_loop(int fd_socket, t_ping *ping, int addr_index)$/;"	f	file:
+process_checksum	process_checksum.c	/^unsigned short	process_checksum(unsigned short *icmp_pckt)$/;"	f
+receive_echo_reply	receiving/receive_echo_reply.c	/^void	receive_echo_reply(int fd_socket, t_ping *ping, int addr_index)$/;"	f
+recv_ip_pckt	receiving/receive_echo_reply.c	/^static struct iphdr	*recv_ip_pckt(int fd_socket, struct sockaddr *dest_addr, \\$/;"	f	file:
+run_ping	ft_ping.c	/^static void	run_ping(t_ping *ping)$/;"	f	file:
+send_echo_request	sending/send_echo_request.c	/^void	send_echo_request(int fd_socket, t_ping *ping, int addr_index)$/;"	f
 set_sock_opt	sending/create_socket.c	/^static void	set_sock_opt(int fd_socket)$/;"	f	file:
-update_addr_list	parsing/update_addr_list.c	/^struct sockaddr_in	*update_addr_list(char *new_addr)$/;"	f
-update_list	parsing/update_addr_list.c	/^static void	update_list(char **list, char *new_addr)$/;"	f	file:
+update_addr_list	parsing/update_addr_list.c	/^struct sockaddr_in	*update_addr_list(char **argv, int addr_count)$/;"	f
