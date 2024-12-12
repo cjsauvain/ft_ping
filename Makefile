@@ -9,7 +9,6 @@ INC_DIR  = include
 #Sources / Headers
 SRC	=	main.c					\
 		ft_ping.c				\
-		process_checksum.c		\
 
 SRC_SENDING =	send_echo_request.c		\
 				create_icmp_hdr.c		\
@@ -18,8 +17,10 @@ SRC_SENDING =	send_echo_request.c		\
 SRC_RECEIVING =	receive_echo_reply.c	\
 				check_checksum_reply.c	\
 
+SRC_UTILS =		process_checksum.c	\
+				get_addr_struct.c	\
+
 SRC_PARSING =	parsing.c			\
-				update_addr_list.c	\
 
 SRC_SIGNAL =	handler.c	\
 
@@ -31,6 +32,7 @@ SRC_DISPLAY =	display_usage_message.c	\
 SRCS =	$(addprefix $(SRCS_DIR)/, $(SRC))						\
 		$(addprefix $(SRCS_DIR)/sending/, $(SRC_SENDING))		\
 		$(addprefix $(SRCS_DIR)/receiving/, $(SRC_RECEIVING))	\
+		$(addprefix $(SRCS_DIR)/utils/, $(SRC_UTILS))			\
 		$(addprefix $(SRCS_DIR)/parsing/, $(SRC_PARSING))		\
 		$(addprefix $(SRCS_DIR)/signal/, $(SRC_SIGNAL))			\
 		$(addprefix $(SRCS_DIR)/display/, $(SRC_DISPLAY))		\
@@ -54,6 +56,7 @@ all: $(NAME)
 $(OBJS_DIR):
 	@mkdir -p	$(OBJS_DIR)/sending 	\
 				$(OBJS_DIR)/receiving	\
+				$(OBJS_DIR)/utils		\
 				$(OBJS_DIR)/parsing		\
 				$(OBJS_DIR)/signal		\
 				$(OBJS_DIR)/display		\

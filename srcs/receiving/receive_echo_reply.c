@@ -20,18 +20,32 @@ static struct iphdr	*recv_ip_pckt(int fd_socket, struct sockaddr *dest_addr, \
 
 }
 
-void	receive_echo_reply(int fd_socket, t_ping *ping, int addr_index)
+static void	display_icmp_reply(struct icmphdr *icmp_reply)
+{
+	unsigned char	*paquet;
+
+	paquet = (unsigned char *)icmp_reply;
+	for (size_t i = 0; i < ICMP_PCKT_SIZE; i++)
+	{
+       	printf("%02x ", paquet[i]);
+       	if ((i + 1) % 16 == 0)
+           	printf("\n");
+		else
+			printf(" ");
+    }
+}
+
+void	receive_echo_reply(int fd_socket, t_ping *ping)
 {
 	struct iphdr	*ip_reply;
 	struct icmphdr	*icmp_reply;
-	struct sockaddr	*dest_addr;
-	struct timeval	tv_reply;
 
-	dest_addr = (struct sockaddr *)&ping->dest_addr_list[addr_index];
-	ip_reply = recv_ip_pckt(fd_socket, dest_addr, &tv_reply);
+	ip_reply = recv_ip_pckt(fd_socket, &ping->dest_addr, &ping->stats.tv_reply);
 	icmp_reply = (struct icmphdr *)((char *)ip_reply + 20);
+	display_icmp_reply(icmp_reply);
 	if (check_checksum_reply(icmp_reply))
 		return ;
-	display_reply(ip_reply, icmp_reply, tv_reply, tv_reply);
+	display_reply(ip_reply, icmp_reply, ping->stats.tv_request, \
+					ping->stats.tv_reply);
 	ping->stats.received_pckt++;
 }

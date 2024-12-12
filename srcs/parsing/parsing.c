@@ -20,7 +20,7 @@ static t_ping	initialize_ping_struct(void)
 	t_ping	ping;
 
 	memset(&ping.icmp_pckt, 0, ICMP_HDR_SIZE + ICMP_DATA_SIZE);
-	ping.dest_addr_list = NULL;
+	memset(&ping.dest_addr, 0, sizeof(ping.dest_addr));
 	ping.stats.sent_pckt = 0;
 	ping.stats.received_pckt = 0;
 	ping.verbose_mode = false;
@@ -28,30 +28,26 @@ static t_ping	initialize_ping_struct(void)
 	return ping;
 }
 
-t_ping	parsing(int argc, char **argv)
+t_ping	parsing(int argc, char **argv, int *first_addr_index)
 {
 	t_ping	ping;
 	int		i;
-	int		addr_count;
 
 	if (argc == 1)
 		display_error_and_exit();
 	ping = initialize_ping_struct();
 	i = 1;
-	addr_count = 0;
 	while (argv[i])
 	{
 		if (argv[i][0] == '-' && argv[i][1] == '?')
 			display_help_and_exit();
 		else if (argv[i][0] == '-')
 			get_ping_opt(&ping, argv[i]);
-		else
-			addr_count++;
+		else if (!*first_addr_index)
+			*first_addr_index = i;
 		i++;
 	}
-	if (!addr_count)
+	if (!first_addr_index)
 		display_error_and_exit();
-	ping.dest_addr_count = addr_count;
-	ping.dest_addr_list = update_addr_list(argv + 1, addr_count);
 	return ping;
 }
