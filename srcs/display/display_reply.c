@@ -1,14 +1,11 @@
 #include "ft_ping.h"
 
-static char	*get_source_ip_addr(unsigned int saddr)
+static void	get_source_ip_addr(char *buffer, unsigned int saddr)
 {
 	struct in_addr 	ip_addr;
-	char			*buffer;
 
 	ip_addr.s_addr = saddr;
-	buffer = inet_ntoa(ip_addr);
-
-	return buffer;
+	buffer = strcpy(buffer, inet_ntoa(ip_addr));
 }
 
 static void	get_latency(char *latency_str, struct timeval tv_request, struct timeval tv_reply)
@@ -26,18 +23,18 @@ static void	get_latency(char *latency_str, struct timeval tv_request, struct tim
 	latency_str[i] = ',';
 }
 
-void	display_reply(struct iphdr *ip_reply, struct icmphdr *icmp_reply, \
+void	display_reply(struct iphdr *ip_reply, int icmp_seq, \
 			struct timeval tv_request, struct timeval tv_reply)
 {
-	char	*source_ip_addr;
+	char	source_ip_addr[MAX_IPV4_LEN];
 	int		icmp_pckt_size;
 	char	latency[10];
 
-	source_ip_addr = get_source_ip_addr(ip_reply->saddr);
+	memset(source_ip_addr, 0, MAX_IPV4_LEN);
+	get_source_ip_addr(source_ip_addr, ip_reply->saddr);
 	icmp_pckt_size = ntohs(ip_reply->tot_len) - (ip_reply->ihl * 4);
 	get_latency(latency, tv_request, tv_reply);
 	printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%s ms\n",	\
-			icmp_pckt_size, source_ip_addr, icmp_reply->un.echo.sequence, \
-			ip_reply->ttl, latency);
+			icmp_pckt_size, source_ip_addr, icmp_seq, ip_reply->ttl, latency);
 }
 

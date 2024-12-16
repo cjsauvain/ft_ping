@@ -10,15 +10,14 @@ create_socket	sending/create_socket.c	/^int	create_socket(void)$/;"	f
 display_data_sent	display/display_data_sent.c	/^void	display_data_sent(char *dest_addr)$/;"	f
 display_error_and_exit	display/display_usage_message.c	/^void	display_error_and_exit(void)$/;"	f
 display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_exit(void)$/;"	f
-display_icmp_reply	receiving/receive_echo_reply.c	/^static void	display_icmp_reply(struct icmphdr *icmp_reply)$/;"	f	file:
 display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(int sent_pckt, int received_pckt)$/;"	f
-display_reply	display/display_reply.c	/^void	display_reply(struct iphdr *ip_reply, struct icmphdr *icmp_reply, \\$/;"	f
+display_reply	display/display_reply.c	/^void	display_reply(struct iphdr *ip_reply, int icmp_seq, \\$/;"	f
 ft_ping	ft_ping.c	/^int	ft_ping(int argc, char **argv)$/;"	f
 g_sigint_triggered	main.c	/^bool	g_sigint_triggered = false;$/;"	v
 get_addr_struct	utils/get_addr_struct.c	/^struct sockaddr	get_addr_struct(char *dest_addr)$/;"	f
 get_latency	display/display_reply.c	/^static void	get_latency(char *latency_str, struct timeval tv_request, struct timeval tv_reply)$/;"	f	file:
 get_ping_opt	parsing/parsing.c	/^static void	get_ping_opt(t_ping *ping, char *opt)$/;"	f	file:
-get_source_ip_addr	display/display_reply.c	/^static char	*get_source_ip_addr(unsigned int saddr)$/;"	f	file:
+get_source_ip_addr	display/display_reply.c	/^static void	get_source_ip_addr(char *buffer, unsigned int saddr)$/;"	f	file:
 handler	signal/handler.c	/^void	handler(int signum)$/;"	f
 initialize_icmp_data	sending/send_echo_request.c	/^static void	initialize_icmp_data(char *data, struct timeval *tv_request)$/;"	f	file:
 initialize_ping_struct	parsing/parsing.c	/^static t_ping	initialize_ping_struct(void)$/;"	f	file:

@@ -22,6 +22,7 @@
 # define	IP_HDR_SIZE		20
 # define	ONE_SEC			1000000
 # define	MAX_IPV4_LEN	16
+# define	BUFFER_SIZE		4096
 
 extern bool	g_sigint_triggered;
 
@@ -54,13 +55,19 @@ void				send_echo_request(int fd_socket, t_ping *ping);
 void				receive_echo_reply(int fd_socket, t_ping *ping);
 int					create_socket(void);
 struct icmphdr		create_icmp_hdr(void);
+
+/************************/
+/*		DELETE			*/
+/************************/
+void				display_content(struct icmphdr *icmp_reply, char *ping_type);
+
 int					check_checksum_reply(struct icmphdr *icmp_pckt);
 void				handler(int signum);
 struct sockaddr		get_addr_struct(char *dest_addr);
 
 /** Display **/
 void				display_reply(struct iphdr *ip_pckt, \
-						struct icmphdr *icmp_pckt, \
+						int icmp_seq, \
 						struct timeval tv_request, struct timeval tv_reply);
 void    			display_ping_stats(int sent_pckt, int received_pckt);
 void    			display_error_and_exit(void);

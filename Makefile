@@ -9,6 +9,7 @@ INC_DIR  = include
 #Sources / Headers
 SRC	=	main.c					\
 		ft_ping.c				\
+		display_content.c		\
 
 SRC_SENDING =	send_echo_request.c		\
 				create_icmp_hdr.c		\
