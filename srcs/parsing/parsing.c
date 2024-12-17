@@ -15,19 +15,6 @@ static void	get_ping_opt(t_ping *ping, char *opt)
 	}
 }
 
-static t_ping	initialize_ping_struct(void)
-{
-	t_ping	ping;
-
-	memset(&ping.icmp_pckt, 0, ICMP_HDR_SIZE + ICMP_DATA_SIZE);
-	memset(&ping.dest_addr, 0, sizeof(ping.dest_addr));
-	ping.stats.sent_pckt = 0;
-	ping.stats.received_pckt = 0;
-	ping.verbose_mode = false;
-
-	return ping;
-}
-
 t_ping	parsing(int argc, char **argv, int *first_addr_index)
 {
 	t_ping	ping;

@@ -8,33 +8,28 @@ static void	get_source_ip_addr(char *buffer, unsigned int saddr)
 	buffer = strcpy(buffer, inet_ntoa(ip_addr));
 }
 
-static void	get_latency(char *latency_str, struct timeval tv_request, struct timeval tv_reply)
+static void	get_rtt_str(char *rtt_str, float ts_rtt)
 {
-	float	latency_float;
-	int		i;
+	int	i;
 
-	latency_float = (tv_reply.tv_sec - tv_request.tv_sec) * 1000 \
-						+ (tv_reply.tv_usec - tv_request.tv_usec) / 1000.0;
-	snprintf(latency_str, 10, "%.03f", latency_float);
-
+	snprintf(rtt_str, 10, "%.03f", ts_rtt);
 	i = 0;
-	while (latency_str[i] && latency_str[i] != '.')
+	while (rtt_str[i] && rtt_str[i] != '.')
 		i++;
-	latency_str[i] = ',';
+	rtt_str[i] = ',';
 }
 
-void	display_reply(struct iphdr *ip_reply, int icmp_seq, \
-			struct timeval tv_request, struct timeval tv_reply)
+void	display_reply(struct iphdr *ip_reply, int icmp_seq, t_ping_stats stats)
 {
 	char	source_ip_addr[MAX_IPV4_LEN];
 	int		icmp_pckt_size;
-	char	latency[10];
+	char	rtt_str[10];
 
 	memset(source_ip_addr, 0, MAX_IPV4_LEN);
 	get_source_ip_addr(source_ip_addr, ip_reply->saddr);
 	icmp_pckt_size = ntohs(ip_reply->tot_len) - (ip_reply->ihl * 4);
-	get_latency(latency, tv_request, tv_reply);
+	get_rtt_str(rtt_str, stats.ts_rtt);
 	printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%s ms\n",	\
-			icmp_pckt_size, source_ip_addr, icmp_seq, ip_reply->ttl, latency);
+			icmp_pckt_size, source_ip_addr, icmp_seq, ip_reply->ttl, rtt_str);
 }
 

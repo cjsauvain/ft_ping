@@ -15,6 +15,7 @@
 # include <netdb.h>
 # include <stdbool.h>
 # include <time.h>
+# include <math.h>
 
 # define	ICMP_HDR_SIZE	8
 # define	ICMP_DATA_SIZE	56
@@ -28,10 +29,16 @@ extern bool	g_sigint_triggered;
 
 typedef struct s_ping_stats
 {
-	int				sent_pckt;
-	int				received_pckt;
-	struct timeval	tv_request;
-	struct timeval	tv_reply;
+	int		sent_pckt;
+	int		received_pckt;
+	double	ts_request;
+	double	ts_reply;
+	double	ts_min;
+	double	ts_max;
+	double	ts_avg;
+	double	ts_stddev;
+	double	ts_rtt;
+	double	*rtt_list;
 }	t_ping_stats;
 
 typedef struct s_icmp_pckt
@@ -48,30 +55,52 @@ typedef struct s_ping
 	bool				verbose_mode;
 }	t_ping;
 
-t_ping				parsing(int argc, char **argv, int *first_addr_index);
 int					ft_ping(int argc, char **argv);
-unsigned short		process_checksum(unsigned short *icmp_pckt);
-void				send_echo_request(int fd_socket, t_ping *ping);
-void				receive_echo_reply(int fd_socket, t_ping *ping);
-int					create_socket(void);
+
+/********************/
+/*	   PARSING		*/
+/********************/
+t_ping				parsing(int argc, char **argv, int *first_addr_index);
+t_ping  			initialize_ping_struct(void);
+
+/********************/
+/*	   SENDING		*/
+/********************/
 struct icmphdr		create_icmp_hdr(void);
+int					create_socket(void);
+void				send_echo_request(int fd_socket, t_ping *ping);
 
-/************************/
-/*		DELETE			*/
-/************************/
-void				display_content(struct icmphdr *icmp_reply, char *ping_type);
-
+/********************/
+/*	   RECEIVING	*/
+/********************/
 int					check_checksum_reply(struct icmphdr *icmp_pckt);
-void				handler(int signum);
-struct sockaddr		get_addr_struct(char *dest_addr);
+void				receive_echo_reply(int fd_socket, t_ping *ping);
 
-/** Display **/
-void				display_reply(struct iphdr *ip_pckt, \
-						int icmp_seq, \
-						struct timeval tv_request, struct timeval tv_reply);
-void    			display_ping_stats(int sent_pckt, int received_pckt);
+/********************/
+/*	   DISPLAY		*/
+/********************/
+void				display_reply(struct iphdr *ip_pckt, int icmp_seq, \
+						t_ping_stats stats);
+void    			display_ping_stats(t_ping_stats stats);
 void    			display_error_and_exit(void);
 void    			display_help_and_exit(void);
 void				display_data_sent(char *dest_addr);
+
+/********************/
+/*		UTILS		*/
+/********************/
+struct sockaddr		get_addr_struct(char *dest_addr);
+unsigned short		process_checksum(unsigned short *icmp_pckt);
+
+/********************/
+/*	  TIMESTAMPS	*/
+/********************/
+void    			update_timestamps(t_ping_stats *stats);
+double   			get_time_ms(struct timeval tv);
+
+/********************/
+/*	    SIGNAL		*/
+/********************/
+void				handler(int signum);
 
 #endif
