@@ -16,13 +16,13 @@ ft_ping	ft_ping.c	/^int	ft_ping(int argc, char **argv)$/;"	f
 g_sigint_triggered	main.c	/^bool	g_sigint_triggered = false;$/;"	v
 get_addr_struct	utils/get_addr_struct.c	/^struct sockaddr	get_addr_struct(char *dest_addr)$/;"	f
 get_ping_opt	parsing/parsing.c	/^static void	get_ping_opt(t_ping *ping, char *opt)$/;"	f	file:
-get_rtt	timestamps/update_timestamps.c	/^static float	get_rtt(float ts_request, float ts_reply)$/;"	f	file:
+get_rtt	timestamps/update_timestamps.c	/^static double	get_rtt(double ts_request, double ts_reply)$/;"	f	file:
 get_rtt_str	display/display_reply.c	/^static void	get_rtt_str(char *rtt_str, float ts_rtt)$/;"	f	file:
-get_source_ip_addr	display/display_reply.c	/^static void	get_source_ip_addr(char *buffer, unsigned int saddr)$/;"	f	file:
+get_source_ip_addr	utils/get_source_ip_addr.c	/^void	get_source_ip_addr(char *buffer, unsigned int saddr)$/;"	f
 get_time_ms	timestamps/get_time_ms.c	/^double	get_time_ms(struct timeval tv)$/;"	f
-get_ts_avg	timestamps/update_timestamps.c	/^static float	get_ts_avg(float ts_avg, float ts_rtt, int received_pckt)$/;"	f	file:
-get_ts_min_and_max	timestamps/update_timestamps.c	/^static void	get_ts_min_and_max(float ts_rtt, float *ts_min, float *ts_max)$/;"	f	file:
-get_ts_stddev	timestamps/update_timestamps.c	/^static float	get_ts_stddev(float *rtt_list, float ts_avg, int received_pckt)$/;"	f	file:
+get_ts_avg	timestamps/update_timestamps.c	/^static double	get_ts_avg(double ts_avg, double ts_rtt, int received_pckt)$/;"	f	file:
+get_ts_min_and_max	timestamps/update_timestamps.c	/^static void	get_ts_min_and_max(double ts_rtt, double *ts_min, double *ts_max)$/;"	f	file:
+get_ts_stddev	timestamps/update_timestamps.c	/^static double	get_ts_stddev(double *rtt_list, double ts_avg, int received_pckt)$/;"	f	file:
 handler	signal/handler.c	/^void	handler(int signum)$/;"	f
 initialize_dest_addr	parsing/initialize_ping_struct.c	/^static struct sockaddr	initialize_dest_addr(void)$/;"	f	file:
 initialize_icmp_data	sending/send_echo_request.c	/^static void	initialize_icmp_data(char *data, double *ts_request)$/;"	f	file:
@@ -40,5 +40,5 @@ recv_ip_pckt	receiving/receive_echo_reply.c	/^static struct iphdr	*recv_ip_pckt(
 run_ping	ft_ping.c	/^static void	run_ping(t_ping *ping, char **argv)$/;"	f	file:
 send_echo_request	sending/send_echo_request.c	/^void	send_echo_request(int fd_socket, t_ping *ping)$/;"	f
 set_sock_opt	sending/create_socket.c	/^static void	set_sock_opt(int fd_socket)$/;"	f	file:
-update_rtt_list	timestamps/update_timestamps.c	/^static void	update_rtt_list(float *rtt_list, int received_pckt, float ts_rtt)$/;"	f	file:
+update_rtt_list	timestamps/update_timestamps.c	/^static double	*update_rtt_list(double *rtt_list, int received_pckt, double ts_rtt)$/;"	f	file:
 update_timestamps	timestamps/update_timestamps.c	/^void	update_timestamps(t_ping_stats *stats)$/;"	f

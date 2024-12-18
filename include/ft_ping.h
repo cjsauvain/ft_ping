@@ -84,11 +84,13 @@ void				display_reply(struct iphdr *ip_pckt, int icmp_seq, \
 void    			display_ping_stats(t_ping_stats stats);
 void    			display_error_and_exit(void);
 void    			display_help_and_exit(void);
-void				display_data_sent(char *dest_addr);
+void				display_data_sent(char *dest_addr, \
+						struct sockaddr_in *dest_addr_struct);
 
 /********************/
 /*		UTILS		*/
 /********************/
+void    			get_source_ip_addr(char *buffer, unsigned int saddr);
 struct sockaddr		get_addr_struct(char *dest_addr);
 unsigned short		process_checksum(unsigned short *icmp_pckt);
 

@@ -9,14 +9,14 @@ static void	set_sock_opt(int fd_socket)
 	tv_exit.tv_usec = 0;
 	if (setsockopt(fd_socket, SOL_SOCKET, SO_RCVTIMEO, &tv_exit, sizeof(tv_exit)) == -1)
 	{
-		fprintf(stderr, "Could not set socket options...\n");
+		perror("ft_ping: ");
 		exit(1);
 	}
 
 	filter.data = ~(1 << ICMP_ECHOREPLY);
 	if (setsockopt(fd_socket, SOL_RAW, ICMP_FILTER, &filter, sizeof(filter)) == -1)
 	{
-		fprintf(stderr, "Could not set socket options...\n");
+		perror("ft_ping: ");
 		exit(1);
 	}
 }

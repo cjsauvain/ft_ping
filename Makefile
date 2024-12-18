@@ -17,8 +17,9 @@ SRC_SENDING =	send_echo_request.c		\
 SRC_RECEIVING =	receive_echo_reply.c	\
 				check_checksum_reply.c	\
 
-SRC_UTILS =		process_checksum.c	\
-				get_addr_struct.c	\
+SRC_UTILS =		process_checksum.c		\
+				get_addr_struct.c		\
+				get_source_ip_addr.c	\
 
 SRC_PARSING =	parsing.c					\
 				initialize_ping_struct.c	\

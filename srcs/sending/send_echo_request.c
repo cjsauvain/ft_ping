@@ -31,9 +31,10 @@ void	send_echo_request(int fd_socket, t_ping *ping)
 	if (sendto(fd_socket, &ping->icmp_pckt, ICMP_PCKT_SIZE, 0, \
 			&ping->dest_addr, sizeof(ping->dest_addr)) == - 1)
 	{
-		fprintf(stderr, "ft_ping: could not send packet...\n");
+		perror("ft_ping: sending packet");
 		exit(1);
 	}
 	ping->stats.sent_pckt++;
+	ping->icmp_pckt.icmphdr.un.echo.sequence++;
 	ping->icmp_pckt.icmphdr.checksum = 0;
 }

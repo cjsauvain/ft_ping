@@ -12,7 +12,7 @@ struct sockaddr	get_addr_struct(char *dest_addr)
 	if (status)
 	{
 		fprintf(stderr, "ft_ping: %s\n", gai_strerror(status));
-		exit(status);
+		exit(1);
 	}
 
 	return *res->ai_addr;

@@ -3,7 +3,7 @@
 static void	ping_loop(int fd_socket, t_ping *ping, char *dest_addr_str)
 {
 	send_echo_request(fd_socket, ping);
-	display_data_sent(dest_addr_str);
+	display_data_sent(dest_addr_str, (struct sockaddr_in *)&ping->dest_addr);
 	receive_echo_reply(fd_socket, ping);
 	while (!g_sigint_triggered)
 	{
