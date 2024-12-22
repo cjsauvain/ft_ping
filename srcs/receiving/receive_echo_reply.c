@@ -1,5 +1,12 @@
 #include "ft_ping.h"
 
+static bool	check_packet_id(struct icmphdr *reply, struct icmphdr request)
+{
+	if (reply->un.echo.id != request.un.echo.id)
+		return false;
+	return true;
+}
+
 static struct iphdr	*recv_ip_pckt(int fd_socket, struct sockaddr *dest_addr, \
 						t_ping_stats *stats)
 {
@@ -25,13 +32,19 @@ void	receive_echo_reply(int fd_socket, t_ping *ping)
 	struct iphdr	*ip_reply;
 	struct icmphdr	*icmp_reply;
 
-	ip_reply = recv_ip_pckt(fd_socket, &ping->dest_addr, &ping->stats);
-	ping->stats.received_pckt++;
-	if (!ip_reply)
-		return ;
-	icmp_reply = (struct icmphdr *)((char *)ip_reply + 20);
-	if (check_checksum_reply(icmp_reply))
-		return ;
+	while (!g_sigint_triggered)
+	{
+		ip_reply = recv_ip_pckt(fd_socket, &ping->dest_addr, &ping->stats);
+		if (!ip_reply)
+			return ;
+		icmp_reply = (struct icmphdr *)((char *)ip_reply + 20);
+		if (check_packet_id(icmp_reply, ping->icmp_pckt.icmphdr) == false)
+			continue ;
+		if (check_checksum_reply(icmp_reply))
+			return ;
+		ping->stats.received_pckt++;
+		break ;
+	}
 	display_reply(ip_reply, icmp_reply->un.echo.sequence, \
-					ping->stats);
+			ping->stats);
 }

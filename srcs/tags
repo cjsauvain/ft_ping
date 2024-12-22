@@ -5,9 +5,10 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 check_checksum_reply	receiving/check_checksum_reply.c	/^int	check_checksum_reply(struct icmphdr *icmp_pckt)$/;"	f
+check_packet_id	receiving/receive_echo_reply.c	/^static bool	check_packet_id(struct icmphdr *reply, struct icmphdr request)$/;"	f	file:
 create_icmp_hdr	sending/create_icmp_hdr.c	/^struct icmphdr	create_icmp_hdr(void)$/;"	f
 create_socket	sending/create_socket.c	/^int	create_socket(void)$/;"	f
-display_data_sent	display/display_data_sent.c	/^void	display_data_sent(char *dest_addr)$/;"	f
+display_data_sent	display/display_data_sent.c	/^void	display_data_sent(char *dest_addr, struct sockaddr_in *dest_addr_struct)$/;"	f
 display_error_and_exit	display/display_usage_message.c	/^void	display_error_and_exit(void)$/;"	f
 display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_exit(void)$/;"	f
 display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(t_ping_stats stats)$/;"	f
