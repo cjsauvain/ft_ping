@@ -1,74 +1,91 @@
 #include "ft_ping.h"
 
-static double	get_rtt(double ts_request, double ts_reply)
+static struct timeval	get_rtt(struct timeval tv_request, \
+								struct timeval tv_reply)
 {
-	return ts_reply - ts_request;
+	struct timeval	rtt;
+
+	rtt.tv_sec = tv_reply.tv_sec - tv_request.tv_sec;
+	rtt.tv_usec = tv_reply.tv_usec - tv_request.tv_usec;
+	return rtt;
 }
 
-static double	*update_rtt_list(double *rtt_list, int received_pckt, double ts_rtt)
+static struct timeval	*update_rtt_list(struct timeval *rtt_list, \
+							int received_pckt, struct timeval tv_rtt)
 {
-	double	*new_rtt_list;
-	new_rtt_list = realloc(rtt_list, (received_pckt + 1) * sizeof(double));
+	struct timeval	*new_rtt_list;
+
+	new_rtt_list = realloc(rtt_list, (received_pckt + 1) \
+					* sizeof(struct timeval));
 	if (!new_rtt_list)
 	{
 		perror("ft_ping: ");
 		exit(2);
 	}
-	new_rtt_list[received_pckt] = ts_rtt;
+	new_rtt_list[received_pckt] = tv_rtt;
 
 	return new_rtt_list;
 }
 
-static void	get_ts_min_and_max(double ts_rtt, double *ts_min, double *ts_max)
+static void	get_tv_min_and_max(struct timeval tv_rtt, struct timeval *tv_min, \
+								struct timeval *tv_max)
 {
-	if (!*ts_min)
-		*ts_min = ts_rtt;
-	if (!*ts_max)
-		*ts_max = ts_rtt;
+	if (!get_time_ms(*tv_min))
+		*tv_min = tv_rtt;
+	if (!get_time_ms(*tv_max))
+		*tv_max = tv_rtt;
 
-	if (ts_rtt < *ts_min)
-		*ts_min = ts_rtt;
-	else if (ts_rtt > *ts_max)
-		*ts_max = ts_rtt;
+	if (get_time_ms(tv_rtt) < get_time_ms(*tv_min))
+		*tv_min = tv_rtt;
+	else if (get_time_ms(tv_rtt) > get_time_ms(*tv_max))
+		*tv_max = tv_rtt;
 }
 
-static double	get_ts_avg(double ts_avg, double ts_rtt, int received_pckt)
+static struct timeval	get_tv_avg(struct timeval tv_avg, \
+									struct timeval tv_rtt, int received_pckt)
 {
-	return ((ts_avg * received_pckt + ts_rtt) / (received_pckt + 1));
+	struct timeval	tv_new_avg;
+
+	tv_new_avg.tv_sec = (tv_avg.tv_sec * received_pckt + tv_rtt.tv_sec) \
+							/ (received_pckt + 1);
+	tv_new_avg.tv_usec = (tv_avg.tv_usec * received_pckt + tv_rtt.tv_usec) \
+							/ (received_pckt + 1);
+	return tv_new_avg;
 }
 
-static double	get_ts_stddev(double *rtt_list, double ts_avg, int received_pckt)
+static struct timeval	get_tv_stddev(struct timeval *rtt_list, \
+									struct timeval tv_avg, int received_pckt)
 {
-	double	result;
+	struct timeval	result;
 	int		i;
 
 	if (!received_pckt)
-		return ts_avg;
-	result = 0;
+		return tv_avg;
+	memset(&result, 0, sizeof(struct timeval));
 	i = 0;
 	while (i < received_pckt)
 	{
-		result += pow(rtt_list[i] - ts_avg, 2.0);
+		result.tv_sec += pow(rtt_list[i].tv_sec - tv_avg.tv_sec, 2);
+		result.tv_usec += pow(rtt_list[i].tv_usec - tv_avg.tv_usec, 2);
 		i++;
 	}
-	result /= received_pckt;
-	result = sqrt(result);
+	result.tv_sec /= received_pckt;
+	result.tv_usec /= received_pckt;
+	result.tv_sec = sqrt(result.tv_sec);
+	result.tv_usec = sqrt(result.tv_usec);
 
 	return result;
 }
 
 void	update_timestamps(t_ping_stats *stats)
 {
-	struct timeval	tv_reply;
-
-	gettimeofday(&tv_reply, NULL);
-	stats->ts_reply = get_time_ms(tv_reply);
-	stats->ts_rtt = get_rtt(stats->ts_request, stats->ts_reply);
+	gettimeofday(&stats->tv_reply, NULL);
+	stats->tv_rtt = get_rtt(stats->tv_request, stats->tv_reply);
 	stats->rtt_list = update_rtt_list(stats->rtt_list, \
-							stats->received_pckt, stats->ts_rtt);
-	get_ts_min_and_max(stats->ts_rtt, &stats->ts_min, &stats->ts_max);
-	stats->ts_avg = get_ts_avg(stats->ts_avg, stats->ts_rtt, \
+							stats->received_pckt, stats->tv_rtt);
+	get_tv_min_and_max(stats->tv_rtt, &stats->tv_min, &stats->tv_max);
+	stats->tv_avg = get_tv_avg(stats->tv_avg, stats->tv_rtt, \
 						stats->received_pckt);
-	stats->ts_stddev = get_ts_stddev(stats->rtt_list, stats->ts_avg, \
+	stats->tv_stddev = get_tv_stddev(stats->rtt_list, stats->tv_avg, \
 						stats->received_pckt);
 }

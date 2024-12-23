@@ -31,9 +31,13 @@ void	receive_echo_reply(int fd_socket, t_ping *ping)
 {
 	struct iphdr	*ip_reply;
 	struct icmphdr	*icmp_reply;
+	int				sigint;
 
-	while (!g_sigint_triggered)
+	sigint = 1;
+	while (sigint)
 	{
+		if (!g_sigint_triggered)
+			sigint = 0;
 		ip_reply = recv_ip_pckt(fd_socket, &ping->dest_addr, &ping->stats);
 		if (!ip_reply)
 			return ;
@@ -43,8 +47,8 @@ void	receive_echo_reply(int fd_socket, t_ping *ping)
 		if (check_checksum_reply(icmp_reply))
 			return ;
 		ping->stats.received_pckt++;
+		display_reply(ip_reply, icmp_reply->un.echo.sequence, \
+				ping->stats);
 		break ;
 	}
-	display_reply(ip_reply, icmp_reply->un.echo.sequence, \
-			ping->stats);
 }

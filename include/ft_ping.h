@@ -29,16 +29,16 @@ extern bool	g_sigint_triggered;
 
 typedef struct s_ping_stats
 {
-	int		sent_pckt;
-	int		received_pckt;
-	double	ts_request;
-	double	ts_reply;
-	double	ts_min;
-	double	ts_max;
-	double	ts_avg;
-	double	ts_stddev;
-	double	ts_rtt;
-	double	*rtt_list;
+	int				sent_pckt;
+	int				received_pckt;
+	struct timeval	tv_request;
+	struct timeval	tv_reply;
+	struct timeval	tv_min;
+	struct timeval	tv_max;
+	struct timeval	tv_avg;
+	struct timeval	tv_stddev;
+	struct timeval	tv_rtt;
+	struct timeval	*rtt_list;
 }	t_ping_stats;
 
 typedef struct s_icmp_pckt
@@ -98,7 +98,7 @@ unsigned short		process_checksum(unsigned short *icmp_pckt);
 /*	  TIMESTAMPS	*/
 /********************/
 void    			update_timestamps(t_ping_stats *stats);
-double   			get_time_ms(struct timeval tv);
+float   			get_time_ms(struct timeval tv);
 
 /********************/
 /*	    SIGNAL		*/

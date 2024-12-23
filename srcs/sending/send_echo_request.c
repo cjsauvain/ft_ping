@@ -13,19 +13,20 @@ static void	randomly_fill_data(char *data)
 	}
 }
 
-static void	initialize_icmp_data(char *data, double *ts_request)
+static struct timeval	initialize_icmp_data(char *data)
 {
 	struct timeval	tv_request;
 
 	gettimeofday(&tv_request, NULL);
-	*ts_request = get_time_ms(tv_request);
 	memcpy(data, &tv_request, sizeof(tv_request) / 2);
 	randomly_fill_data(data);
+
+	return tv_request;
 }
 
 void	send_echo_request(int fd_socket, t_ping *ping)
 {
-	initialize_icmp_data(ping->icmp_pckt.data, &ping->stats.ts_request);
+	ping->stats.tv_request = initialize_icmp_data(ping->icmp_pckt.data);
 	ping->icmp_pckt.icmphdr.checksum = \
 				process_checksum((unsigned short *)&ping->icmp_pckt);
 	if (sendto(fd_socket, &ping->icmp_pckt, ICMP_PCKT_SIZE, 0, \

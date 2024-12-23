@@ -22,13 +22,13 @@ static t_ping_stats	initialize_ping_stats(void)
 
 	stats.sent_pckt = 0;
 	stats.received_pckt = 0;
-	stats.ts_request = 0;
-	stats.ts_reply = 0;
-	stats.ts_min = 0;
-	stats.ts_max = 0;
-	stats.ts_avg = 0;
-	stats.ts_stddev = 0;
-	stats.ts_rtt = 0;
+	memset(&stats.tv_request, 0, sizeof(struct timeval));
+	memset(&stats.tv_reply, 0, sizeof(struct timeval));
+	memset(&stats.tv_min, 0, sizeof(struct timeval));
+	memset(&stats.tv_max, 0, sizeof(struct timeval));
+	memset(&stats.tv_avg, 0, sizeof(struct timeval));
+	memset(&stats.tv_stddev, 0, sizeof(struct timeval));
+	memset(&stats.tv_rtt, 0, sizeof(struct timeval));
 	stats.rtt_list = NULL;
 
 	return stats;
