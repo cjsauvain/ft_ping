@@ -10,7 +10,8 @@ void	display_ping_stats(t_ping_stats stats)
 	printf("%d packets transmitted, %d packets received, %.0f%% packet loss\n", \
 			stats.sent_pckt, stats.received_pckt, packet_loss);
 	printf("round-trip min/avg/max/stddev = ");
-	printf("%.03f/%.03f/%.03f/%.03f ms\n", get_time_ms(stats.tv_min), \
-			get_time_ms(stats.tv_avg), get_time_ms(stats.tv_max), \
-			get_time_ms(stats.tv_stddev));
+	printf("%li,%.03i/", stats.tv_min / 1000, (uint32_t)stats.tv_min % 1000);
+	printf("%li,%.03i/", stats.tv_avg / 1000, (uint32_t)stats.tv_avg % 1000);
+	printf("%li,%.03i/", stats.tv_max / 1000, (uint32_t)stats.tv_max % 1000);
+	printf("%li,%.03i\n", stats.tv_stddev / 1000, (uint32_t)stats.tv_stddev % 1000);
 }

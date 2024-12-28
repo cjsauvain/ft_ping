@@ -1,6 +1,6 @@
 #include "ft_ping.h"
 
-float	get_time_ms(struct timeval tv)
+suseconds_t	get_time_microseconds(struct timeval tv)
 {
-	return tv.tv_sec * 1000 + tv.tv_usec / 1000.0;
+	return tv.tv_sec * 1000000 + tv.tv_usec;
 }

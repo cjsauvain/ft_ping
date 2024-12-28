@@ -1,16 +1,18 @@
 #include "ft_ping.h"
 
-static void	get_ping_opt(t_ping *ping, char *opt)
+static void	get_ping_opt(bool *verbose_mode, char *opt)
 {
 	int	i = 1;
 
-	ping->verbose_mode = false;
 	while (opt[i])
 	{
 		if (opt[i] != 'v')
 			display_error_and_exit();
 		else
-			ping->verbose_mode = true;
+		{
+			*verbose_mode = true;
+			return ;
+		}
 		i++;
 	}
 }
@@ -29,7 +31,7 @@ t_ping	parsing(int argc, char **argv, int *first_addr_index)
 		if (argv[i][0] == '-' && argv[i][1] == '?')
 			display_help_and_exit();
 		else if (argv[i][0] == '-')
-			get_ping_opt(&ping, argv[i]);
+			get_ping_opt(&ping.verbose_mode, argv[i]);
 		else if (!*first_addr_index)
 			*first_addr_index = i;
 		i++;

@@ -1,0 +1,2 @@
+- Fix dlopen valgrind leaks
+- Add multiple arguments statistics

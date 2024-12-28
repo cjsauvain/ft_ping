@@ -13,29 +13,29 @@ static void	randomly_fill_data(char *data)
 	}
 }
 
-static struct timeval	initialize_icmp_data(char *data)
+static suseconds_t	initialize_icmp_data(char *data)
 {
 	struct timeval	tv_request;
 
-	gettimeofday(&tv_request, NULL);
+	if (gettimeofday(&tv_request, NULL) == -1)
+		return -1;;
 	memcpy(data, &tv_request, sizeof(tv_request) / 2);
 	randomly_fill_data(data);
 
-	return tv_request;
+	return get_time_microseconds(tv_request);
 }
 
-void	send_echo_request(int fd_socket, t_ping *ping)
+void	send_echo_request(t_ping *ping)
 {
-	ping->stats.tv_request = initialize_icmp_data(ping->icmp_pckt.data);
-	ping->icmp_pckt.icmphdr.checksum = \
-				process_checksum((unsigned short *)&ping->icmp_pckt);
-	if (sendto(fd_socket, &ping->icmp_pckt, ICMP_PCKT_SIZE, 0, \
+	ping->stats.tv_request = initialize_icmp_data(ping->icmp_pckt_request.data);
+	if (ping->stats.tv_request == -1)
+		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
+	ping->icmp_pckt_request.icmphdr.checksum = \
+				process_checksum((unsigned short *)&ping->icmp_pckt_request);
+	if (sendto(ping->send_socket, &ping->icmp_pckt_request, ICMP_PCKT_SIZE, 0, \
 			&ping->dest_addr, sizeof(ping->dest_addr)) == - 1)
-	{
-		perror("ft_ping: sending packet");
-		exit(1);
-	}
+		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
 	ping->stats.sent_pckt++;
-	ping->icmp_pckt.icmphdr.un.echo.sequence++;
-	ping->icmp_pckt.icmphdr.checksum = 0;
+	ping->icmp_pckt_request.icmphdr.un.echo.sequence++;
+	ping->icmp_pckt_request.icmphdr.checksum = 0;
 }

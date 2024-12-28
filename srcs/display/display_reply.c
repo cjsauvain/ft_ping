@@ -1,29 +1,23 @@
 #include "ft_ping.h"
 
-static void	get_rtt_str(char *rtt_str, struct timeval tv_rtt)
+static void	get_rtt_str(char rtt_str[], suseconds_t tv_rtt)
 {
-	int		i;
-	float	f_rtt;
-
-	f_rtt = get_time_ms(tv_rtt);
-	snprintf(rtt_str, 10, "%.03f", f_rtt);
-	i = 0;
-	while (rtt_str[i] && rtt_str[i] != '.')
-		i++;
-	rtt_str[i] = ',';
+	snprintf(rtt_str, 50, "%ld,%.03ld", tv_rtt / 1000, tv_rtt % 1000);
 }
 
-void	display_reply(struct iphdr *ip_reply, int icmp_seq, t_ping_stats stats)
+void	display_reply(t_reply_pckt reply_pckt, t_ping_stats stats)
 {
 	char	source_ip_addr[MAX_IPV4_LEN];
 	int		icmp_pckt_size;
-	char	rtt_str[10];
+	char	rtt_str[50];
 
 	memset(source_ip_addr, 0, MAX_IPV4_LEN);
-	get_source_ip_addr(source_ip_addr, ip_reply->saddr);
-	icmp_pckt_size = ntohs(ip_reply->tot_len) - (ip_reply->ihl * 4);
+	get_source_ip_addr(source_ip_addr, reply_pckt.iphdr.saddr);
+	icmp_pckt_size = ntohs(reply_pckt.iphdr.tot_len) \
+						- (reply_pckt.iphdr.ihl * 4);
 	get_rtt_str(rtt_str, stats.tv_rtt);
 	printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%s ms\n",	\
-			icmp_pckt_size, source_ip_addr, icmp_seq, ip_reply->ttl, rtt_str);
+		icmp_pckt_size, source_ip_addr, \
+		reply_pckt.icmp_pckt.icmphdr.un.echo.sequence, \
+		reply_pckt.iphdr.ttl, rtt_str);
 }
-

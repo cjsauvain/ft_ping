@@ -1,8 +1,21 @@
 #include "ft_ping.h"
 
+static void	free_res(struct addrinfo *res)
+{
+	struct addrinfo	*tmp;
+
+	while (res)
+	{
+		tmp = res->ai_next;
+		free(res);
+		res = tmp;
+	}
+}
+
 struct sockaddr	get_addr_struct(char *dest_addr)
 {
 	struct addrinfo	hints, *res;
+	struct sockaddr	dest_addr_struct;
 	int				status;
 
 	memset(&hints, 0, sizeof(hints));
@@ -14,7 +27,8 @@ struct sockaddr	get_addr_struct(char *dest_addr)
 		fprintf(stderr, "ft_ping: %s\n", gai_strerror(status));
 		exit(1);
 	}
-
-	return *res->ai_addr;
+	dest_addr_struct = *res->ai_addr;
+	free_res(res);
+	return dest_addr_struct;
 }
 
