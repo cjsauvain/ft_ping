@@ -15,6 +15,8 @@ display_error_and_exit	display/display_usage_message.c	/^void	display_error_and_
 display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_exit(void)$/;"	f
 display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(t_ping_stats stats)$/;"	f
 display_reply	display/display_reply.c	/^void	display_reply(t_reply_pckt reply_pckt, t_ping_stats stats)$/;"	f
+display_round_trip_stats	display/display_ping_stats.c	/^void	display_round_trip_stats(suseconds_t tv_min, suseconds_t tv_max, \\$/;"	f
+display_transmission_stats	display/display_ping_stats.c	/^void	display_transmission_stats(int sent_pckt, int received_pckt)$/;"	f
 free_res	utils/get_addr_struct.c	/^static void	free_res(struct addrinfo *res)$/;"	f	file:
 ft_ping	ft_ping.c	/^int	ft_ping(int argc, char **argv)$/;"	f
 g_sigint_triggered	main.c	/^bool	g_sigint_triggered = false;$/;"	v
@@ -39,13 +41,14 @@ initialize_reply_pckt	parsing/initialize_ping_struct.c	/^static t_reply_pckt	ini
 initialize_verbose_mode	parsing/initialize_ping_struct.c	/^static bool	initialize_verbose_mode(void)$/;"	f	file:
 main	main.c	/^int	main(int argc, char **argv)$/;"	f
 parsing	parsing/parsing.c	/^t_ping	parsing(int argc, char **argv, int *first_addr_index)$/;"	f
-ping_loop	ft_ping.c	/^static void	ping_loop(t_ping *ping, char *dest_addr_str)$/;"	f	file:
+ping_loop	run_ping.c	/^static void	ping_loop(t_ping *ping, char *dest_addr_str)$/;"	f	file:
 process_checksum	utils/process_checksum.c	/^unsigned short	process_checksum(unsigned short *icmp_pckt)$/;"	f
 randomly_fill_data	sending/send_echo_request.c	/^static void	randomly_fill_data(char *data)$/;"	f	file:
 receive_echo_reply	receiving/receive_echo_reply.c	/^ssize_t	receive_echo_reply(t_ping *ping)$/;"	f
 recv_ip_pckt	receiving/receive_echo_reply.c	/^static int	recv_ip_pckt(int recv_socket, struct sockaddr *dest_addr, \\$/;"	f	file:
-run_ping	ft_ping.c	/^static void	run_ping(t_ping *ping, char **argv)$/;"	f	file:
+run_ping	run_ping.c	/^void	run_ping(t_ping *ping, char **argv)$/;"	f
 send_echo_request	sending/send_echo_request.c	/^void	send_echo_request(t_ping *ping)$/;"	f
+send_left_dest_addr_packets	run_ping.c	/^static void	send_left_dest_addr_packets(t_ping *ping, char **argv)$/;"	f	file:
 set_sock_opt	sockets/set_sock_opt.c	/^void	set_sock_opt(int fd_socket)$/;"	f
 update_rtt_list	timestamps/update_timestamps.c	/^static suseconds_t	*update_rtt_list(suseconds_t *rtt_list, \\$/;"	f	file:
 update_timestamps	timestamps/update_timestamps.c	/^int	update_timestamps(t_ping_stats *stats)$/;"	f

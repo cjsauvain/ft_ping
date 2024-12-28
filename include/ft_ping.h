@@ -65,6 +65,7 @@ typedef struct s_ping
 }	t_ping;
 
 int					ft_ping(int argc, char **argv);
+void    			run_ping(t_ping *ping, char **argv);
 void    			clean_exit(int send_socket, int recv_socket, \
 						suseconds_t *rtt_list, int exit_status);
 
@@ -98,6 +99,11 @@ ssize_t				receive_echo_reply(t_ping *ping);
 /********************/
 void				display_reply(t_reply_pckt reply_pckt, t_ping_stats stats);
 void    			display_ping_stats(t_ping_stats stats);
+void    			display_transmission_stats(int sent_pckt, \
+						int received_pckt);
+void    			display_round_trip_stats(suseconds_t tv_min, \
+						suseconds_t tv_max, suseconds_t tv_avg, \
+						suseconds_t tv_stddev);
 void    			display_error_and_exit(void);
 void    			display_help_and_exit(void);
 void				display_data_sent(char *dest_addr, \

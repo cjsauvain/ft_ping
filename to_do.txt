@@ -1,2 +1,3 @@
-- Fix dlopen valgrind leaks
-- Add multiple arguments statistics
+- Fix dlopen valgrind leaks (be sure it's not my vm that is causing this leak, test with school's vm)
+- Add multiple arguments statistics (done, do multiple tests)
+- Fix Ctrl-C display problem

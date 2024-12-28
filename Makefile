@@ -9,6 +9,7 @@ INC_DIR  = include
 #Sources / Headers
 SRC	=	main.c			\
 		ft_ping.c		\
+		run_ping.c		\
 		clean_exit.c	\
 
 SRC_SENDING =	send_echo_request.c		\
