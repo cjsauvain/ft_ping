@@ -16,6 +16,7 @@
 # include <stdbool.h>
 # include <time.h>
 # include <math.h>
+# include <termios.h>
 
 # define	ICMP_HDR_SIZE	8
 # define	ICMP_DATA_SIZE	56
@@ -126,5 +127,11 @@ suseconds_t			get_time_microseconds(struct timeval tv);
 /*	    SIGNAL		*/
 /********************/
 void				init_signal_handler(void);
+
+/********************/
+/*	    TERMIOS		*/
+/********************/
+void    			disable_echoctl(void);
+void    			restore_termios_config(void);
 
 #endif

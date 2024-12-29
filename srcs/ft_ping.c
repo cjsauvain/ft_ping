@@ -6,6 +6,7 @@ int	ft_ping(int argc, char **argv)
 	int		first_addr_index;
 
 	first_addr_index = 0;
+	disable_echoctl();
 	init_signal_handler();
 	ping = parsing(argc, argv, &first_addr_index);
 	argv += first_addr_index;

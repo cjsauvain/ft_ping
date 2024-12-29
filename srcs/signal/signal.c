@@ -3,6 +3,7 @@
 static void	handler(int signum)
 {
 	g_sigint_triggered = true;
+	restore_termios_config();
 	(void)signum;
 }
 

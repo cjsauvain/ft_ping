@@ -10,6 +10,7 @@ clean_exit	clean_exit.c	/^void	clean_exit(int send_socket, int recv_socket, suse
 close_sockets	sockets/close_sockets.c	/^void	close_sockets(int send_socket, int recv_socket)$/;"	f
 create_icmp_hdr	sending/create_icmp_hdr.c	/^struct icmphdr	create_icmp_hdr(void)$/;"	f
 create_sockets	sockets/create_sockets.c	/^void	create_sockets(int *send_socket, int *recv_socket)$/;"	f
+disable_echoctl	termios/termios_config.c	/^void	disable_echoctl(void)$/;"	f
 display_data_sent	display/display_data_sent.c	/^void	display_data_sent(char *dest_addr, struct sockaddr_in *dest_addr_struct)$/;"	f
 display_error_and_exit	display/display_usage_message.c	/^void	display_error_and_exit(void)$/;"	f
 display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_exit(void)$/;"	f
@@ -46,6 +47,7 @@ process_checksum	utils/process_checksum.c	/^unsigned short	process_checksum(unsi
 randomly_fill_data	sending/send_echo_request.c	/^static void	randomly_fill_data(char *data)$/;"	f	file:
 receive_echo_reply	receiving/receive_echo_reply.c	/^ssize_t	receive_echo_reply(t_ping *ping)$/;"	f
 recv_ip_pckt	receiving/receive_echo_reply.c	/^static int	recv_ip_pckt(int recv_socket, struct sockaddr *dest_addr, \\$/;"	f	file:
+restore_termios_config	termios/termios_config.c	/^void	restore_termios_config(void)$/;"	f
 run_ping	run_ping.c	/^void	run_ping(t_ping *ping, char **argv)$/;"	f
 send_echo_request	sending/send_echo_request.c	/^void	send_echo_request(t_ping *ping)$/;"	f
 send_left_dest_addr_packets	run_ping.c	/^static void	send_left_dest_addr_packets(t_ping *ping, char **argv)$/;"	f	file:

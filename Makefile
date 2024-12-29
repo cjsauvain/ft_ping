@@ -31,6 +31,8 @@ SRC_PARSING =	parsing.c					\
 
 SRC_SIGNAL =	signal.c	\
 
+SRC_TERMIOS =	termios_config.c	\
+
 SRC_DISPLAY =	display_usage_message.c	\
 				display_reply.c			\
 				display_ping_stats.c	\
@@ -46,6 +48,7 @@ SRCS =	$(addprefix $(SRCS_DIR)/, $(SRC))						\
 		$(addprefix $(SRCS_DIR)/utils/, $(SRC_UTILS))			\
 		$(addprefix $(SRCS_DIR)/parsing/, $(SRC_PARSING))		\
 		$(addprefix $(SRCS_DIR)/signal/, $(SRC_SIGNAL))			\
+		$(addprefix $(SRCS_DIR)/termios/, $(SRC_TERMIOS))			\
 		$(addprefix $(SRCS_DIR)/display/, $(SRC_DISPLAY))		\
 		$(addprefix $(SRCS_DIR)/timestamps/, $(SRC_TIMESTAMPS))	\
 
@@ -75,6 +78,7 @@ $(OBJS_DIR):
 				$(OBJS_DIR)/signal		\
 				$(OBJS_DIR)/display		\
 				$(OBJS_DIR)/timestamps	\
+				$(OBJS_DIR)/termios		\
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(INC_FOLDER) -o $(NAME) $(LIBINC)

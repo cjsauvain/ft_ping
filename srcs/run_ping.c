@@ -2,12 +2,9 @@
 
 static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 {
-	int	i;
-
-	i = 0;
-	while (argv[i])
+	while (*argv)
 	{
-		if (argv[i][0] != '-')
+		if (*argv[0] != '-')
 		{
 			ping->stats.sent_pckt = 0;
 			ping->stats.received_pckt = 0;
@@ -18,7 +15,7 @@ static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 			display_transmission_stats(ping->stats.sent_pckt, \
 				ping->stats.received_pckt);
 		}
-		i++;
+		argv++;
 	}
 }
 
@@ -40,6 +37,7 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 		if (bytes_received != -1)
 			display_reply(ping->reply_pckt, ping->stats);
 	}
+	printf("^C");
 	display_ping_stats(ping->stats);
 	free(ping->stats.rtt_list);
 }
