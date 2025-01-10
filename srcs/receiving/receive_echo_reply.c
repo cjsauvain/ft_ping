@@ -18,6 +18,7 @@ static int	recv_ip_pckt(int recv_socket, struct sockaddr *dest_addr, \
 	addr_len = sizeof(struct sockaddr_in);
 	bytes_received = recvfrom(recv_socket, buffer, BUFFER_SIZE, 0, \
 					dest_addr, &addr_len);
+	printf("bytes_received = %ld\n", bytes_received);
 	if (bytes_received == -1)
 		return -1;
 	memcpy(&reply_pckt->iphdr, buffer, IP_HDR_SIZE);

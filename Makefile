@@ -81,7 +81,7 @@ $(OBJS_DIR):
 				$(OBJS_DIR)/termios		\
 
 $(NAME): $(OBJS_DIR) $(OBJS)
-	$(CC) $(OBJS) $(INC_FOLDER) -o $(NAME) $(LIBINC)
+	$(CC) $(CFLAGS) $(OBJS) $(INC_FOLDER) -o $(NAME) $(LIBINC)
 
 clean:
 	rm -rf $(OBJS_DIR)

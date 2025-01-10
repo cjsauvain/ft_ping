@@ -19,4 +19,3 @@ struct sockaddr	get_addr_struct(char *dest_addr)
 	freeaddrinfo(res);
 	return dest_addr_struct;
 }
-
