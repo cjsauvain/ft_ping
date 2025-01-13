@@ -108,7 +108,8 @@ void    			display_round_trip_stats(suseconds_t tv_min, \
 void    			display_error_and_exit(void);
 void    			display_help_and_exit(void);
 void				display_data_sent(char *dest_addr, \
-						struct sockaddr_in *dest_addr_struct);
+						struct sockaddr_in *dest_addr_struct, \
+						bool verbose_mode, u_int16_t echo_request_id);
 
 /********************/
 /*		UTILS		*/
