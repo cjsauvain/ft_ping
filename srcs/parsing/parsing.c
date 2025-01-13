@@ -7,7 +7,7 @@ static void	get_ping_opt(bool *verbose_mode, char *opt)
 	while (opt[i])
 	{
 		if (opt[i] != 'v')
-			display_error_and_exit();
+			display_invalid_option_and_exit(opt);
 		else
 		{
 			*verbose_mode = true;
@@ -23,7 +23,7 @@ t_ping	parsing(int argc, char **argv, int *first_addr_index)
 	int		i;
 
 	if (argc == 1)
-		display_error_and_exit();
+		display_missing_operand_and_exit();
 	ping = initialize_ping_struct();
 	i = 1;
 	while (argv[i])
@@ -36,7 +36,5 @@ t_ping	parsing(int argc, char **argv, int *first_addr_index)
 			*first_addr_index = i;
 		i++;
 	}
-	if (!first_addr_index)
-		display_error_and_exit();
 	return ping;
 }

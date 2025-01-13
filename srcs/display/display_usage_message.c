@@ -1,6 +1,13 @@
 #include "ft_ping.h"
 
-void	display_error_and_exit(void)
+void	display_invalid_option_and_exit(char *invalid_option)
+{
+	fprintf(stderr, "ft_ping: invalid option -- '%s'\n", invalid_option);
+	fprintf(stderr, "Try 'ping -?' for more information.\n");
+	exit(64);
+}
+
+void	display_missing_operand_and_exit(void)
 {
 	fprintf(stderr, "ft_ping: missing host operand\n");
 	fprintf(stderr, "Try 'ping -?' for more information.\n");

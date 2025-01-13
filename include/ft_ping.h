@@ -105,7 +105,8 @@ void    			display_transmission_stats(int sent_pckt, \
 void    			display_round_trip_stats(suseconds_t tv_min, \
 						suseconds_t tv_max, suseconds_t tv_avg, \
 						suseconds_t tv_stddev);
-void    			display_error_and_exit(void);
+void    			display_invalid_option_and_exit(char *invalid_option);
+void    			display_missing_operand_and_exit(void);
 void    			display_help_and_exit(void);
 void				display_data_sent(char *dest_addr, \
 						struct sockaddr_in *dest_addr_struct, \

@@ -46,9 +46,9 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 
 void	run_ping(t_ping *ping, char **argv)
 {
+	create_sockets(&ping->send_socket, &ping->recv_socket);
 	ping->dest_addr = get_addr_struct(*argv);
 	ping->icmp_pckt_request.icmphdr = create_icmp_hdr();
-	create_sockets(&ping->send_socket, &ping->recv_socket);
 	ping_loop(ping, *argv);
 	send_left_dest_addr_packets(ping, argv + 1);
 	close_sockets(ping->send_socket, ping->recv_socket);
