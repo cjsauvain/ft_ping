@@ -13,7 +13,7 @@ static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 			display_data_sent(*argv, \
 				(struct sockaddr_in *)&ping->dest_addr);
 			display_transmission_stats(ping->stats.sent_pckt, \
-				ping->stats.received_pckt);
+				ping->stats.received_pckt, *argv);
 		}
 		argv++;
 	}
@@ -38,7 +38,7 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 			display_reply(ping->reply_pckt, ping->stats);
 	}
 	printf("^C");
-	display_ping_stats(ping->stats);
+	display_ping_stats(ping->stats, dest_addr_str);
 	free(ping->stats.rtt_list);
 }
 
