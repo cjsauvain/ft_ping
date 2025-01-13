@@ -1,2 +1,0 @@
-- Fix dlopen valgrind leaks (be sure it's not my vm that is causing this leak, test on school's vm)
-- Add multiple arguments statistics (done, do multiple tests)
