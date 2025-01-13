@@ -18,7 +18,6 @@ static int	recv_ip_pckt(int recv_socket, struct sockaddr *dest_addr, \
 	addr_len = sizeof(struct sockaddr_in);
 	bytes_received = recvfrom(recv_socket, buffer, BUFFER_SIZE, 0, \
 					dest_addr, &addr_len);
-	printf("bytes_received = %ld\n", bytes_received);
 	if (bytes_received == -1)
 		return -1;
 	memcpy(&reply_pckt->iphdr, buffer, IP_HDR_SIZE);
@@ -44,15 +43,18 @@ ssize_t	receive_echo_reply(t_ping *ping)
 							&ping->dest_addr, &ping->reply_pckt);
 		if (bytes_received == -1)
 			return -1;
-		if (check_packet_id(ping->reply_pckt.icmp_pckt.icmphdr, \
-				ping->icmp_pckt_request.icmphdr) == false)
-			continue ;
-		if (check_checksum_reply(&ping->reply_pckt.icmp_pckt))
-			return -1;
 		status = update_timestamps(&ping->stats);
 		if (status < 0)
 			clean_exit(ping->send_socket, ping->recv_socket, \
 				ping->stats.rtt_list, status * -1);
+		if (check_packet_id(ping->reply_pckt.icmp_pckt.icmphdr, \
+				ping->icmp_pckt_request.icmphdr) == false)
+		{
+			bytes_received = -1;
+			continue ;
+		}
+		if (check_checksum_reply(&ping->reply_pckt.icmp_pckt))
+			return -1;
 		ping->stats.received_pckt++;
 	}
 	return bytes_received;

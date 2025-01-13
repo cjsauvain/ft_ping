@@ -15,10 +15,10 @@ void	display_round_trip_stats(suseconds_t tv_min, suseconds_t tv_max, \
 									suseconds_t tv_avg, suseconds_t tv_stddev)
 {
 	printf("round-trip min/avg/max/stddev = ");
-	printf("%li,%.03i/", tv_min / 1000, (uint32_t)tv_min % 1000);
-	printf("%li,%.03i/", tv_avg / 1000, (uint32_t)tv_avg % 1000);
-	printf("%li,%.03i/", tv_max / 1000, (uint32_t)tv_max % 1000);
-	printf("%li,%.03i\n", tv_stddev / 1000, (uint32_t)tv_stddev % 1000);
+	printf("%li.%.03i/", tv_min / 1000, (uint32_t)tv_min % 1000);
+	printf("%li.%.03i/", tv_avg / 1000, (uint32_t)tv_avg % 1000);
+	printf("%li.%.03i/", tv_max / 1000, (uint32_t)tv_max % 1000);
+	printf("%li.%.03i\n", tv_stddev / 1000, (uint32_t)tv_stddev % 1000);
 }
 
 void	display_ping_stats(t_ping_stats stats)
