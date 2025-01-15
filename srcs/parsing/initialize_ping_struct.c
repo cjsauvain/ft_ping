@@ -19,9 +19,9 @@ static t_reply_pckt	initialize_reply_pckt(void)
 	return reply_pckt;
 }
 
-static struct sockaddr	initialize_dest_addr(void)
+static struct sockaddr	*initialize_dest_addr(void)
 {
-	struct sockaddr	dest_addr;
+	struct sockaddr	*dest_addr;
 
 	memset(&dest_addr, 0, sizeof(dest_addr));
 	return dest_addr;

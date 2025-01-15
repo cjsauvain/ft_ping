@@ -7,11 +7,11 @@ void	display_data_sent(char *dest_addr, \
 {
 	char	dest_addr_buffer[MAX_IPV4_LEN];
 
-	get_source_ip_addr(dest_addr_buffer, dest_addr_struct->sin_addr.s_addr);
+	get_source_addr(dest_addr_buffer, dest_addr_struct->sin_addr.s_addr);
 	printf("PING %s (%s): %d data bytes", dest_addr, \
 			dest_addr_buffer, ICMP_DATA_SIZE);
 	if (verbose_mode == true)
 		printf(", id 0x%hx = %hu\n", echo_request_id, echo_request_id);
 	else
-		write(1, "\n", 1);
+		printf("\n");
 }

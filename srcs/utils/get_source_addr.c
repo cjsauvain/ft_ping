@@ -1,6 +1,6 @@
 #include "ft_ping.h"
 
-void	get_source_ip_addr(char *buffer, unsigned int saddr)
+void	get_source_addr(char *buffer, unsigned int saddr)
 {
 	struct in_addr 	ip_addr;
 

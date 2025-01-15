@@ -8,7 +8,7 @@ void	create_sockets(int *send_socket, int *recv_socket)
 		fprintf(stderr, "ft_ping: Lacking privilege for icmp socket.\n");
 		exit(1);
 	}
-	set_sock_opt(*recv_socket);
+	set_recv_sock_opt(*recv_socket);
 
 	*send_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (*send_socket == -1)
@@ -17,4 +17,5 @@ void	create_sockets(int *send_socket, int *recv_socket)
 		close(*recv_socket);
 		exit(1);
 	}
+	set_send_sock_opt(*send_socket);
 }

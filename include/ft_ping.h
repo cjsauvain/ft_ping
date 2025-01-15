@@ -18,20 +18,21 @@
 # include <math.h>
 # include <termios.h>
 
-# define	ICMP_HDR_SIZE	8
-# define	ICMP_DATA_SIZE	56
-# define	ICMP_PCKT_SIZE	64
-# define	IP_HDR_SIZE		20
-# define	ONE_SEC			1000000
-# define	MAX_IPV4_LEN	16
-# define	BUFFER_SIZE		4096
+# define	ICMP_HDR_SIZE		8
+# define	ICMP_DATA_SIZE		56
+# define	ICMP_PCKT_SIZE		64
+# define	IP_HDR_SIZE			20
+# define	ONE_SEC				1000000
+# define	MAX_IPV4_LEN		16
+# define	BUFFER_SIZE			4096
+# define	ICMP_MESSAGE_MAXLEN	100
 
 extern bool	g_sigint_triggered;
 
 typedef struct s_ping_stats
 {
-	int				sent_pckt;
-	int				received_pckt;
+	int			sent_pckt;
+	int			received_pckt;
 	suseconds_t	tv_request;
 	suseconds_t	tv_reply;
 	suseconds_t	tv_min;
@@ -60,7 +61,7 @@ typedef struct s_ping
 	int					recv_socket;
 	t_icmp_pckt			icmp_pckt_request;
 	t_reply_pckt		reply_pckt;
-	struct sockaddr		dest_addr;
+	struct sockaddr		*dest_addr;
 	t_ping_stats		stats;
 	bool				verbose_mode;
 }	t_ping;
@@ -86,7 +87,8 @@ void				send_echo_request(t_ping *ping);
 /*	   SOCKETS		*/
 /********************/
 void				create_sockets(int *send_socket, int *recv_socket);
-void    			set_sock_opt(int fd_socket);
+void    			set_recv_sock_opt(int fd_socket);
+void    			set_send_sock_opt(int fd_socket);
 void    			close_sockets(int send_socket, int recv_socket);
 
 /********************/
@@ -98,7 +100,8 @@ ssize_t				receive_echo_reply(t_ping *ping);
 /********************/
 /*	   DISPLAY		*/
 /********************/
-void				display_reply(t_reply_pckt reply_pckt, t_ping_stats stats);
+void				display_reply(t_reply_pckt reply_pckt, t_ping_stats stats, \
+						int send_socket, int recv_socket);
 void    			display_ping_stats(t_ping_stats stats, char *dest_addr_str);
 void    			display_transmission_stats(int sent_pckt, \
 						int received_pckt, char *dest_addr_str);
@@ -113,10 +116,23 @@ void				display_data_sent(char *dest_addr, \
 						bool verbose_mode, u_int16_t echo_request_id);
 
 /********************/
+/*	ICMP_MESSAGES	*/
+/********************/
+void    			get_destination_unreachable_message(char *icmp_message, \
+						u_int8_t code);
+void    			get_source_quench_message(char *icmp_message);
+void    			get_redirect_message(char *icmp_message, \
+						u_int8_t code);
+void    			get_time_exceeded_message(char *icmp_message, \
+						u_int8_t code);
+void    			get_parameter_problem_message(char *icmp_message, \
+						u_int8_t code);
+
+/********************/
 /*		UTILS		*/
 /********************/
-void    			get_source_ip_addr(char *buffer, unsigned int saddr);
-struct sockaddr		get_addr_struct(char *dest_addr);
+void    			get_source_addr(char *buffer, unsigned int saddr);
+struct sockaddr		*get_addr_struct(char *dest_addr);
 unsigned short		process_checksum(unsigned short *icmp_pckt);
 
 /********************/
