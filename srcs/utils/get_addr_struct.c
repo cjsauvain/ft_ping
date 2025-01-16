@@ -13,9 +13,9 @@ struct sockaddr	*get_addr_struct(char *dest_addr)
 	if (status)
 	{
 		fprintf(stderr, "ft_ping: unknown host\n");
-		return NULL;
+		//return NULL;
 	}
 	dest_addr_struct = res->ai_addr;
-	freeaddrinfo(res);
+	//freeaddrinfo(res);
 	return dest_addr_struct;
 }

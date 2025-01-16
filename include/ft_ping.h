@@ -64,6 +64,7 @@ typedef struct s_ping
 	struct sockaddr		*dest_addr;
 	t_ping_stats		stats;
 	bool				verbose_mode;
+	bool				unreachable;
 }	t_ping;
 
 int					ft_ping(int argc, char **argv);
@@ -102,7 +103,8 @@ ssize_t				receive_echo_reply(t_ping *ping);
 /********************/
 void				display_reply(t_reply_pckt reply_pckt, t_ping_stats stats, \
 						int send_socket, int recv_socket);
-void    			display_ping_stats(t_ping_stats stats, char *dest_addr_str);
+void    			display_ping_stats(t_ping_stats stats, char *dest_addr_str, \
+						bool unreachable);
 void    			display_transmission_stats(int sent_pckt, \
 						int received_pckt, char *dest_addr_str);
 void    			display_round_trip_stats(suseconds_t tv_min, \

@@ -43,7 +43,6 @@ get_tv_reply	timestamps/update_timestamps.c	/^static suseconds_t	get_tv_reply(vo
 get_tv_stddev	timestamps/update_timestamps.c	/^static suseconds_t	get_tv_stddev(suseconds_t *rtt_list, suseconds_t tv_avg, \\$/;"	f	file:
 handler	signal/signal.c	/^static void	handler(int signum)$/;"	f	file:
 init_signal_handler	signal/signal.c	/^void	init_signal_handler(void)$/;"	f
-initialize_dest_addr	parsing/initialize_ping_struct.c	/^static struct sockaddr	*initialize_dest_addr(void)$/;"	f	file:
 initialize_icmp_data	sending/send_echo_request.c	/^static suseconds_t	initialize_icmp_data(char *data)$/;"	f	file:
 initialize_icmp_pckt	parsing/initialize_ping_struct.c	/^static t_icmp_pckt	initialize_icmp_pckt(void)$/;"	f	file:
 initialize_ping_stats	parsing/initialize_ping_struct.c	/^static t_ping_stats	initialize_ping_stats(void)$/;"	f	file:

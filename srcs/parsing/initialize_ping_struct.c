@@ -19,14 +19,6 @@ static t_reply_pckt	initialize_reply_pckt(void)
 	return reply_pckt;
 }
 
-static struct sockaddr	*initialize_dest_addr(void)
-{
-	struct sockaddr	*dest_addr;
-
-	memset(&dest_addr, 0, sizeof(dest_addr));
-	return dest_addr;
-}
-
 static t_ping_stats	initialize_ping_stats(void)
 {
 	t_ping_stats	stats;
@@ -45,20 +37,16 @@ static t_ping_stats	initialize_ping_stats(void)
 	return stats;
 }
 
-static bool	initialize_verbose_mode(void)
-{
-	return false;
-}
-
 t_ping	initialize_ping_struct(void)
 {
 	t_ping	ping;
 
 	ping.icmp_pckt_request = initialize_icmp_pckt();
 	ping.reply_pckt = initialize_reply_pckt();
-	ping.dest_addr = initialize_dest_addr();
+	ping.dest_addr = NULL;
 	ping.stats = initialize_ping_stats();
-	ping.verbose_mode = initialize_verbose_mode();
+	ping.verbose_mode = false;
+	ping.unreachable = false;
 
 	return ping;
 }

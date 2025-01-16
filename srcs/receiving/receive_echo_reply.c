@@ -56,5 +56,7 @@ ssize_t	receive_echo_reply(t_ping *ping)
 			return -1;
 		ping->stats.received_pckt++;
 	}
+	if (ping->reply_pckt.icmp_pckt.icmphdr.type == 3)
+		ping->unreachable = true;
 	return bytes_received;
 }
