@@ -14,21 +14,26 @@ close_sockets	sockets/close_sockets.c	/^void	close_sockets(int send_socket, int 
 create_icmp_hdr	sending/create_icmp_hdr.c	/^struct icmphdr	create_icmp_hdr(void)$/;"	f
 create_sockets	sockets/create_sockets.c	/^void	create_sockets(int *send_socket, int *recv_socket)$/;"	f
 disable_echoctl	termios/termios_config.c	/^void	disable_echoctl(void)$/;"	f
+display_bytes_from	display/display_icmp_message.c	/^static int display_bytes_from(u_int32_t saddr, int icmp_pckt_size, u_int8_t type, u_int8_t code)$/;"	f	file:
 display_data_sent	display/display_data_sent.c	/^void	display_data_sent(char *dest_addr, \\$/;"	f
 display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_exit(void)$/;"	f
-display_icmp_message	display/display_reply.c	/^static int	display_icmp_message(u_int32_t saddr, int icmp_pckt_size, \\$/;"	f	file:
+display_icmp_hdr	display/display_ip_hdr.c	/^static void	display_icmp_hdr(struct icmphdr *icmp_pckt_request)$/;"	f	file:
+display_icmp_message	display/display_icmp_message.c	/^int	display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode)$/;"	f
 display_invalid_option_and_exit	display/display_usage_message.c	/^void	display_invalid_option_and_exit(char *invalid_option)$/;"	f
+display_ip_hdr	display/display_ip_hdr.c	/^void	display_ip_hdr(t_icmp_pckt icmp_pckt_reply)$/;"	f
+display_iphdr_dump	display/display_ip_hdr.c	/^static void display_iphdr_dump(unsigned short *iphdr)$/;"	f	file:
+display_iphdr_fields	display/display_ip_hdr.c	/^static void	display_iphdr_fields(struct iphdr *iphdr)$/;"	f	file:
 display_missing_operand_and_exit	display/display_usage_message.c	/^void	display_missing_operand_and_exit(void)$/;"	f
-display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(t_ping_stats stats, char *dest_addr_str)$/;"	f
-display_reply	display/display_reply.c	/^void	display_reply(t_reply_pckt reply_pckt, t_ping_stats stats, \\$/;"	f
+display_non_verbose_output	display/display_reply.c	/^static void display_non_verbose_output(t_reply_pckt reply_pckt, t_ping_stats stats)$/;"	f	file:
+display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(t_ping_stats stats, char *dest_addr_str, bool unreachable)$/;"	f
+display_reply	display/display_reply.c	/^void	display_reply(t_ping *ping)$/;"	f
 display_round_trip_stats	display/display_ping_stats.c	/^void	display_round_trip_stats(suseconds_t tv_min, suseconds_t tv_max, \\$/;"	f
 display_transmission_stats	display/display_ping_stats.c	/^void	display_transmission_stats(int sent_pckt, int received_pckt, char *dest_addr_str)$/;"	f
 ft_ping	ft_ping.c	/^int	ft_ping(int argc, char **argv)$/;"	f
 g_sigint_triggered	main.c	/^bool	g_sigint_triggered = false;$/;"	v
-get_addr_struct	utils/get_addr_struct.c	/^struct sockaddr	*get_addr_struct(char *dest_addr)$/;"	f
-get_dest_addr	run_ping.c	/^static struct sockaddr	*get_dest_addr(char *dest_addr_str, t_ping_stats *stats, \\$/;"	f	file:
+get_addr_struct	utils/get_addr_struct.c	/^int	get_addr_struct(struct sockaddr *dest_addr_struct, char *dest_addr)$/;"	f
 get_destination_unreachable_message	icmp_messages/get_destination_unreachable_message.c	/^void	get_destination_unreachable_message(char *icmp_message, u_int8_t code)$/;"	f
-get_icmp_type_message	display/display_reply.c	/^static void	get_icmp_type_message(char *icmp_message, u_int8_t type, u_int8_t code)$/;"	f	file:
+get_icmp_type_message	display/display_icmp_message.c	/^static void	get_icmp_type_message(char *icmp_message, u_int8_t type, u_int8_t code)$/;"	f	file:
 get_parameter_problem_message	icmp_messages/get_parameter_problem_message.c	/^void	get_parameter_problem_message(char *icmp_message, u_int8_t code)$/;"	f
 get_ping_opt	parsing/parsing.c	/^static void	get_ping_opt(bool *verbose_mode, char *opt)$/;"	f	file:
 get_redirect_message	icmp_messages/get_redirect_message.c	/^void	get_redirect_message(char *icmp_message, u_int8_t code)$/;"	f
@@ -43,12 +48,12 @@ get_tv_reply	timestamps/update_timestamps.c	/^static suseconds_t	get_tv_reply(vo
 get_tv_stddev	timestamps/update_timestamps.c	/^static suseconds_t	get_tv_stddev(suseconds_t *rtt_list, suseconds_t tv_avg, \\$/;"	f	file:
 handler	signal/signal.c	/^static void	handler(int signum)$/;"	f	file:
 init_signal_handler	signal/signal.c	/^void	init_signal_handler(void)$/;"	f
+initialize_dest_addr_struct	parsing/initialize_ping_struct.c	/^static struct sockaddr	initialize_dest_addr_struct(void)$/;"	f	file:
 initialize_icmp_data	sending/send_echo_request.c	/^static suseconds_t	initialize_icmp_data(char *data)$/;"	f	file:
 initialize_icmp_pckt	parsing/initialize_ping_struct.c	/^static t_icmp_pckt	initialize_icmp_pckt(void)$/;"	f	file:
 initialize_ping_stats	parsing/initialize_ping_struct.c	/^static t_ping_stats	initialize_ping_stats(void)$/;"	f	file:
 initialize_ping_struct	parsing/initialize_ping_struct.c	/^t_ping	initialize_ping_struct(void)$/;"	f
 initialize_reply_pckt	parsing/initialize_ping_struct.c	/^static t_reply_pckt	initialize_reply_pckt(void)$/;"	f	file:
-initialize_verbose_mode	parsing/initialize_ping_struct.c	/^static bool	initialize_verbose_mode(void)$/;"	f	file:
 main	main.c	/^int	main(int argc, char **argv)$/;"	f
 parsing	parsing/parsing.c	/^t_ping	parsing(int argc, char **argv, int *first_addr_index)$/;"	f
 ping_loop	run_ping.c	/^static void	ping_loop(t_ping *ping, char *dest_addr_str)$/;"	f	file:

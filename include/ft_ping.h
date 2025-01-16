@@ -61,7 +61,7 @@ typedef struct s_ping
 	int					recv_socket;
 	t_icmp_pckt			icmp_pckt_request;
 	t_reply_pckt		reply_pckt;
-	struct sockaddr		*dest_addr;
+	struct sockaddr		dest_addr;
 	t_ping_stats		stats;
 	bool				verbose_mode;
 	bool				unreachable;
@@ -101,8 +101,7 @@ ssize_t				receive_echo_reply(t_ping *ping);
 /********************/
 /*	   DISPLAY		*/
 /********************/
-void				display_reply(t_reply_pckt reply_pckt, t_ping_stats stats, \
-						int send_socket, int recv_socket);
+void				display_reply(t_ping *ping);
 void    			display_ping_stats(t_ping_stats stats, char *dest_addr_str, \
 						bool unreachable);
 void    			display_transmission_stats(int sent_pckt, \
@@ -116,6 +115,8 @@ void    			display_help_and_exit(void);
 void				display_data_sent(char *dest_addr, \
 						struct sockaddr_in *dest_addr_struct, \
 						bool verbose_mode, u_int16_t echo_request_id);
+int 				display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode);
+void    			display_ip_hdr(t_icmp_pckt icmp_pckt_reply);
 
 /********************/
 /*	ICMP_MESSAGES	*/
@@ -134,7 +135,7 @@ void    			get_parameter_problem_message(char *icmp_message, \
 /*		UTILS		*/
 /********************/
 void    			get_source_addr(char *buffer, unsigned int saddr);
-struct sockaddr		*get_addr_struct(char *dest_addr);
+int					get_addr_struct(struct sockaddr *dest_addr_struct, char *dest_addr);
 unsigned short		process_checksum(unsigned short *icmp_pckt);
 
 /********************/

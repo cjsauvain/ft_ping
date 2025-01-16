@@ -1,9 +1,8 @@
 #include "ft_ping.h"
 
-struct sockaddr	*get_addr_struct(char *dest_addr)
+int	get_addr_struct(struct sockaddr *dest_addr_struct, char *dest_addr)
 {
 	struct addrinfo	hints, *res;
-	struct sockaddr	*dest_addr_struct;
 	int				status;
 
 	memset(&hints, 0, sizeof(hints));
@@ -13,9 +12,9 @@ struct sockaddr	*get_addr_struct(char *dest_addr)
 	if (status)
 	{
 		fprintf(stderr, "ft_ping: unknown host\n");
-		//return NULL;
+		return -1;
 	}
-	dest_addr_struct = res->ai_addr;
-	//freeaddrinfo(res);
-	return dest_addr_struct;
+	*dest_addr_struct = *res->ai_addr;
+	freeaddrinfo(res);
+	return 0;
 }

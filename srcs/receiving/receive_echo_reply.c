@@ -11,15 +11,10 @@ static int	recv_ip_pckt(t_ping *ping)
 {
 	char			buffer[BUFFER_SIZE];
 	ssize_t			bytes_received;
-	socklen_t		addr_len;
 	int				status;
-	struct sockaddr	tmp_dest_addr;
 
 	memset(buffer, 0, BUFFER_SIZE);
-	addr_len = sizeof(struct sockaddr_in);
-	tmp_dest_addr = *ping->dest_addr;
-	bytes_received = recvfrom(ping->recv_socket, buffer, BUFFER_SIZE, 0, \
-					&tmp_dest_addr, &addr_len);
+	bytes_received = recv(ping->recv_socket, buffer, BUFFER_SIZE, 0);
 	if (bytes_received == -1)
 		return -1;
 	memcpy(&ping->reply_pckt.iphdr, buffer, IP_HDR_SIZE);

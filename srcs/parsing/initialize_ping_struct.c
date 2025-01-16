@@ -37,13 +37,21 @@ static t_ping_stats	initialize_ping_stats(void)
 	return stats;
 }
 
+static struct sockaddr	initialize_dest_addr_struct(void)
+{
+	struct sockaddr dest_addr;
+
+	memset(&dest_addr, 0, sizeof(dest_addr));
+	return dest_addr;
+}
+
 t_ping	initialize_ping_struct(void)
 {
 	t_ping	ping;
 
 	ping.icmp_pckt_request = initialize_icmp_pckt();
 	ping.reply_pckt = initialize_reply_pckt();
-	ping.dest_addr = NULL;
+	ping.dest_addr = initialize_dest_addr_struct();
 	ping.stats = initialize_ping_stats();
 	ping.verbose_mode = false;
 	ping.unreachable = false;

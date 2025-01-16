@@ -1,17 +1,5 @@
 #include "ft_ping.h"
 
-static struct sockaddr	*get_dest_addr(char *dest_addr_str, t_ping_stats *stats, \
-							int send_socket, int recv_socket)
-{
-	struct sockaddr	*dest_addr;
-
-	dest_addr = get_addr_struct(dest_addr_str);
-	if (!dest_addr)
-		clean_exit(send_socket, recv_socket, stats->rtt_list, 1);
-	
-	return dest_addr;
-}
-
 static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 {
 	while (*argv)
@@ -38,17 +26,17 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 	send_echo_request(ping);
 	bytes_received = receive_echo_reply(ping);
 	display_data_sent(dest_addr_str, \
-		(struct sockaddr_in *)ping->dest_addr, ping->verbose_mode, \
+		(struct sockaddr_in *)&ping->dest_addr, ping->verbose_mode, \
 		ping->icmp_pckt_request.icmphdr.un.echo.id);
 	if (bytes_received != -1)
-		display_reply(ping->reply_pckt, ping->stats, ping->send_socket, ping->recv_socket);
+		display_reply(ping);
 	while (!g_sigint_triggered)
 	{
 		usleep(ONE_SEC);
 		send_echo_request(ping);
 		bytes_received = receive_echo_reply(ping);
 		if (bytes_received != -1)
-			display_reply(ping->reply_pckt, ping->stats, ping->send_socket, ping->recv_socket);
+			display_reply(ping);
 	}
 	printf("^C");
 	display_ping_stats(ping->stats, dest_addr_str, ping->unreachable);
@@ -58,8 +46,8 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 void	run_ping(t_ping *ping, char **argv)
 {
 	create_sockets(&ping->send_socket, &ping->recv_socket);
-	ping->dest_addr = get_dest_addr(*argv, &ping->stats, \
-						ping->send_socket, ping->recv_socket);
+	if (get_addr_struct(&ping->dest_addr, *argv) == -1)
+		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
 	ping->icmp_pckt_request.icmphdr = create_icmp_hdr();
 	ping_loop(ping, *argv);
 	send_left_dest_addr_packets(ping, argv + 1);
