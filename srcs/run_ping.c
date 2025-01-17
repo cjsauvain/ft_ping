@@ -42,7 +42,7 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 	display_sig();
 	if (g_sig_triggered == SIG_INT)
 	{
-		display_ping_stats(ping->stats, dest_addr_str, ping->unreachable);
+		display_ping_stats(ping->stats, dest_addr_str);
 		free(ping->stats.rtt_list);
 		restore_termios_config();
 	}

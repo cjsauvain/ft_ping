@@ -109,8 +109,7 @@ ssize_t				receive_echo_reply(t_ping *ping);
 /*	   DISPLAY		*/
 /********************/
 void				display_reply(t_ping *ping);
-void    			display_ping_stats(t_ping_stats stats, char *dest_addr_str, \
-						bool unreachable);
+void    			display_ping_stats(t_ping_stats stats, char *dest_addr_str);
 void    			display_transmission_stats(int sent_pckt, \
 						int received_pckt, char *dest_addr_str);
 void    			display_round_trip_stats(suseconds_t tv_min, \

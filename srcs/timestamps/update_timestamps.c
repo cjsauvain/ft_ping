@@ -35,11 +35,13 @@ static suseconds_t	get_tv_avg(suseconds_t tv_avg, suseconds_t tv_rtt, \
 }
 
 static suseconds_t	get_tv_stddev(suseconds_t *rtt_list, suseconds_t tv_avg, \
-									int received_pckt)
+									int received_pckt, int sent_pckt)
 {
 	suseconds_t	result;
 	int			i;
 
+	if (sent_pckt == 1)
+		return 0;
 	if (!received_pckt)
 		return tv_avg;
 	result = 0;
@@ -81,6 +83,6 @@ int	update_timestamps(t_ping_stats *stats)
 	stats->tv_avg = get_tv_avg(stats->tv_avg, stats->tv_rtt, \
 						stats->received_pckt);
 	stats->tv_stddev = get_tv_stddev(stats->rtt_list, stats->tv_avg, \
-						stats->received_pckt);
+						stats->received_pckt, stats->sent_pckt);
 	return 0;
 }
