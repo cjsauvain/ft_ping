@@ -30,17 +30,22 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 		ping->icmp_pckt_request.icmphdr.un.echo.id);
 	if (bytes_received != -1)
 		display_reply(ping);
-	while (!g_sigint_triggered)
+	usleep(ONE_SEC);
+	while (g_sig_triggered == NO_SIGNAL)
 	{
-		usleep(ONE_SEC);
 		send_echo_request(ping);
 		bytes_received = receive_echo_reply(ping);
 		if (bytes_received != -1)
 			display_reply(ping);
+		usleep(ONE_SEC);
 	}
-	printf("^C");
-	display_ping_stats(ping->stats, dest_addr_str, ping->unreachable);
-	free(ping->stats.rtt_list);
+	display_sig();
+	if (g_sig_triggered == SIG_INT)
+	{
+		display_ping_stats(ping->stats, dest_addr_str, ping->unreachable);
+		free(ping->stats.rtt_list);
+		restore_termios_config();
+	}
 }
 
 void	run_ping(t_ping *ping, char **argv)

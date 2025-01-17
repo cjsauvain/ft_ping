@@ -27,7 +27,14 @@
 # define	BUFFER_SIZE			4096
 # define	ICMP_MESSAGE_MAXLEN	100
 
-extern bool	g_sigint_triggered;
+typedef enum	s_sig_enum
+{
+	NO_SIGNAL,
+	SIG_INT,
+	SIG_QUIT,
+}	t_sig_enum;
+
+extern t_sig_enum	g_sig_triggered;
 
 typedef struct s_ping_stats
 {
@@ -117,6 +124,7 @@ void				display_data_sent(char *dest_addr, \
 						bool verbose_mode, u_int16_t echo_request_id);
 int 				display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode);
 void    			display_ip_hdr(t_icmp_pckt icmp_pckt_reply);
+void    			display_sig(void);
 
 /********************/
 /*	ICMP_MESSAGES	*/

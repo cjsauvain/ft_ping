@@ -30,15 +30,15 @@ static int	recv_ip_pckt(t_ping *ping)
 
 ssize_t	receive_echo_reply(t_ping *ping)
 {
-	int		sigint;
+	int		sig;
 	ssize_t	bytes_received;
 
-	sigint = 0;
+	sig = 0;
 	bytes_received = -1;
-	while (!sigint && bytes_received == -1)
+	while (!sig && bytes_received == -1)
 	{
-		if (g_sigint_triggered)
-			sigint = 1;
+		if (g_sig_triggered)
+			sig = 1;
 		bytes_received = recv_ip_pckt(ping);
 		if (bytes_received == -1)
 			return -1;

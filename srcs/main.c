@@ -1,6 +1,6 @@
 #include "ft_ping.h"
 
-bool	g_sigint_triggered = false;
+t_sig_enum	g_sig_triggered = NO_SIGNAL;
 
 int	main(int argc, char **argv)
 {
