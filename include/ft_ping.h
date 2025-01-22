@@ -23,6 +23,7 @@
 # define	ICMP_PCKT_SIZE		64
 # define	IP_HDR_SIZE			20
 # define	ONE_SEC				1000000
+# define	RCV_TIMEOUT			200000
 # define	MAX_IPV4_LEN		16
 # define	BUFFER_SIZE			4096
 # define	ICMP_MESSAGE_MAXLEN	100

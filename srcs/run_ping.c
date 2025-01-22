@@ -24,10 +24,10 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 	ssize_t	bytes_received;
 
 	send_echo_request(ping);
-	bytes_received = receive_echo_reply(ping);
 	display_data_sent(dest_addr_str, \
 		(struct sockaddr_in *)&ping->dest_addr, ping->verbose_mode, \
 		ping->icmp_pckt_request.icmphdr.un.echo.id);
+	bytes_received = receive_echo_reply(ping);
 	if (bytes_received != -1)
 		display_reply(ping);
 	usleep(ONE_SEC);
