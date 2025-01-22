@@ -54,7 +54,6 @@ t_ping	initialize_ping_struct(void)
 	ping.dest_addr = initialize_dest_addr_struct();
 	ping.stats = initialize_ping_stats();
 	ping.verbose_mode = false;
-	ping.unreachable = false;
 
 	return ping;
 }

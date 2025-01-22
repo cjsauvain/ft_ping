@@ -1,10 +1,19 @@
 #include "ft_ping.h"
 
-static bool	check_packet_id(struct icmphdr reply, struct icmphdr request)
+static void	extract_reply(t_reply_pckt *reply_pckt, char *buffer)
 {
-	if (reply.un.echo.id != request.un.echo.id)
-		return false;
-	return true;
+	memcpy(&reply_pckt->iphdr, buffer, IP_HDR_SIZE);
+	memcpy(&reply_pckt->icmp_pckt.icmphdr, buffer + IP_HDR_SIZE, ICMP_HDR_SIZE);
+	if (reply_pckt->icmp_pckt.icmphdr.type == 0)
+		memcpy(&reply_pckt->icmp_pckt.data, \
+				buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_DATA_SIZE);
+	else
+	{
+		memcpy(&reply_pckt->icmp_error.original_iphdr, \
+				buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, IP_HDR_SIZE);
+		memcpy(&reply_pckt->icmp_error.original_icmphdr, \
+				buffer + 2 * IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_HDR_SIZE);
+	}
 }
 
 static int	recv_ip_pckt(t_ping *ping)
@@ -16,18 +25,15 @@ static int	recv_ip_pckt(t_ping *ping)
 	bytes_received = recv(ping->recv_socket, buffer, BUFFER_SIZE, 0);
 	if (bytes_received == -1)
 		return -1;
-	memcpy(&ping->reply_pckt.iphdr, buffer, IP_HDR_SIZE);
-	memcpy(&ping->reply_pckt.icmp_pckt.icmphdr, buffer + IP_HDR_SIZE, ICMP_HDR_SIZE);
-	memcpy(ping->reply_pckt.icmp_pckt.data, buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_DATA_SIZE);
-
+	extract_reply(&ping->reply_pckt, buffer);
 	return bytes_received;
 }
 
-ssize_t	receive_echo_reply(t_ping *ping)
+t_reply_status	receive_echo_reply(t_ping *ping)
 {
-	int		sig;
-	ssize_t	bytes_received;
-	int		status;
+	int				sig;
+	ssize_t			bytes_received;
+	t_reply_status	reply_status;
 
 	sig = 0;
 	bytes_received = -1;
@@ -37,24 +43,15 @@ ssize_t	receive_echo_reply(t_ping *ping)
 			sig = 1;
 		bytes_received = recv_ip_pckt(ping);
 		if (bytes_received == -1)
-			return -1;
-		if (ping->reply_pckt.icmp_pckt.icmphdr.type != 0)
-			break ;
-		if (check_packet_id(ping->reply_pckt.icmp_pckt.icmphdr, \
-				ping->icmp_pckt_request.icmphdr) == false)
+			return NO_BYTES_RECEIVED;
+		reply_status = process_reply(ping);
+		if (!(reply_status == ID_VALID))
 		{
 			bytes_received = -1;
 			continue ;
 		}
-		if (check_checksum_reply(&ping->reply_pckt.icmp_pckt))
-			return -1;
-		status = update_timestamps(&ping->stats);
-		if (status < 0)
-			clean_exit(ping->send_socket, ping->recv_socket, \
-				ping->stats.rtt_list, status * -1);
-		ping->stats.received_pckt++;
+		else if (reply_status == ID_VALID)
+		else if (reply_status == ID_VALID | ECHO_REPLY)
 	}
-	if (ping->reply_pckt.icmp_pckt.icmphdr.type == 3)
-		ping->unreachable = true;
-	return bytes_received;
+	return PCKT_RECEIVED;
 }

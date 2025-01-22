@@ -27,4 +27,6 @@ void	display_ping_stats(t_ping_stats stats, char *dest_addr_str)
 	if (stats.received_pckt)
 		display_round_trip_stats(stats.tv_min, stats.tv_max, \
 			stats.tv_avg, stats.tv_stddev);
+	free(stats.rtt_list);
+	restore_termios_config();
 }

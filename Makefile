@@ -17,6 +17,7 @@ SRC_SENDING =	send_echo_request.c		\
 
 SRC_RECEIVING =	receive_echo_reply.c	\
 				check_checksum_reply.c	\
+				process_reply.c			\
 
 SRC_SOCKETS =	create_sockets.c		\
 				set_sock_opt.c			\

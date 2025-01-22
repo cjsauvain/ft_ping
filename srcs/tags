@@ -8,7 +8,7 @@ RFC_1122_codes	icmp_messages/get_destination_unreachable_message.c	/^static void
 RFC_1812_codes	icmp_messages/get_destination_unreachable_message.c	/^static void	RFC_1812_codes(char *icmp_message, u_int8_t code)$/;"	f	file:
 RFC_792_codes	icmp_messages/get_destination_unreachable_message.c	/^static void	RFC_792_codes(char *icmp_message, u_int8_t code)$/;"	f	file:
 check_checksum_reply	receiving/check_checksum_reply.c	/^int	check_checksum_reply(t_icmp_pckt *icmp_pckt)$/;"	f
-check_packet_id	receiving/receive_echo_reply.c	/^static bool	check_packet_id(struct icmphdr reply, struct icmphdr request)$/;"	f	file:
+check_packet_id	receiving/process_reply.c	/^static bool	check_packet_id(struct icmphdr reply, struct icmphdr request)$/;"	f	file:
 clean_exit	clean_exit.c	/^void	clean_exit(int send_socket, int recv_socket, suseconds_t *rtt_list, \\$/;"	f
 close_sockets	sockets/close_sockets.c	/^void	close_sockets(int send_socket, int recv_socket)$/;"	f
 create_icmp_hdr	sending/create_icmp_hdr.c	/^struct icmphdr	create_icmp_hdr(void)$/;"	f
@@ -30,6 +30,7 @@ display_reply	display/display_reply.c	/^void	display_reply(t_ping *ping)$/;"	f
 display_round_trip_stats	display/display_ping_stats.c	/^void	display_round_trip_stats(suseconds_t tv_min, suseconds_t tv_max, \\$/;"	f
 display_sig	display/display_sig.c	/^void	display_sig(void)$/;"	f
 display_transmission_stats	display/display_ping_stats.c	/^void	display_transmission_stats(int sent_pckt, int received_pckt, char *dest_addr_str)$/;"	f
+extract_reply	receiving/receive_echo_reply.c	/^static void	extract_reply(t_reply_pckt *reply_pckt, char *buffer)$/;"	f	file:
 ft_ping	ft_ping.c	/^int	ft_ping(int argc, char **argv)$/;"	f
 g_sig_triggered	main.c	/^t_sig_enum	g_sig_triggered = NO_SIGNAL;$/;"	v
 get_addr_struct	utils/get_addr_struct.c	/^int	get_addr_struct(struct sockaddr *dest_addr_struct, char *dest_addr)$/;"	f
@@ -59,8 +60,9 @@ main	main.c	/^int	main(int argc, char **argv)$/;"	f
 parsing	parsing/parsing.c	/^t_ping	parsing(int argc, char **argv, int *first_addr_index)$/;"	f
 ping_loop	run_ping.c	/^static void	ping_loop(t_ping *ping, char *dest_addr_str)$/;"	f	file:
 process_checksum	utils/process_checksum.c	/^unsigned short	process_checksum(unsigned short *icmp_pckt)$/;"	f
+process_reply	receiving/process_reply.c	/^t_reply_status	process_reply(t_ping *ping)$/;"	f
 randomly_fill_data	sending/send_echo_request.c	/^static void	randomly_fill_data(char *data)$/;"	f	file:
-receive_echo_reply	receiving/receive_echo_reply.c	/^ssize_t	receive_echo_reply(t_ping *ping)$/;"	f
+receive_echo_reply	receiving/receive_echo_reply.c	/^t_reply_status	receive_echo_reply(t_ping *ping)$/;"	f
 recv_ip_pckt	receiving/receive_echo_reply.c	/^static int	recv_ip_pckt(t_ping *ping)$/;"	f	file:
 restore_termios_config	termios/termios_config.c	/^void	restore_termios_config(void)$/;"	f
 run_ping	run_ping.c	/^void	run_ping(t_ping *ping, char **argv)$/;"	f

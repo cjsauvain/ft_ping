@@ -28,6 +28,14 @@
 # define	BUFFER_SIZE			4096
 # define	ICMP_MESSAGE_MAXLEN	100
 
+typedef enum	s_reply_status
+{
+	NO_BYTES_RECEIVED,
+	PCKT_RECEIVED,
+	ECHO_REPLY,
+	ID_VALID,
+}	t_reply_status;
+
 typedef enum	s_sig_enum
 {
 	NO_SIGNAL,
@@ -57,10 +65,17 @@ typedef struct s_icmp_pckt
 	char			data[ICMP_DATA_SIZE];
 }	t_icmp_pckt;
 
+typedef struct	s_icmp_error
+{
+	struct iphdr	original_iphdr;
+	struct icmphdr	original_icmphdr;
+}	t_icmp_error;
+
 typedef struct s_reply_pckt
 {
 	struct iphdr	iphdr;
 	t_icmp_pckt		icmp_pckt;
+	t_icmp_error	icmp_error;
 }	t_reply_pckt;
 
 typedef struct s_ping
@@ -69,10 +84,10 @@ typedef struct s_ping
 	int					recv_socket;
 	t_icmp_pckt			icmp_pckt_request;
 	t_reply_pckt		reply_pckt;
+	t_icmp_error		icmp_error;
 	struct sockaddr		dest_addr;
 	t_ping_stats		stats;
 	bool				verbose_mode;
-	bool				unreachable;
 }	t_ping;
 
 int					ft_ping(int argc, char **argv);
@@ -104,7 +119,8 @@ void    			close_sockets(int send_socket, int recv_socket);
 /*	   RECEIVING	*/
 /********************/
 int					check_checksum_reply(t_icmp_pckt *icmp_pckt);
-ssize_t				receive_echo_reply(t_ping *ping);
+t_reply_status		receive_echo_reply(t_ping *ping);
+t_reply_status  	process_reply(t_ping *ping);
 
 /********************/
 /*	   DISPLAY		*/
