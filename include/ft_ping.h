@@ -86,6 +86,7 @@ typedef struct s_ping
 	struct sockaddr		dest_addr;
 	t_ping_stats		stats;
 	bool				verbose_mode;
+	int					exit_status;
 }	t_ping;
 
 int					ft_ping(int argc, char **argv);

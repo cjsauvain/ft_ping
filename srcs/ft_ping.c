@@ -11,5 +11,5 @@ int	ft_ping(int argc, char **argv)
 	ping = parsing(argc, argv, &first_addr_index);
 	argv += first_addr_index;
 	run_ping(&ping, argv);
-	return 0;
+	return ping.exit_status;
 }

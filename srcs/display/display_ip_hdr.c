@@ -13,12 +13,12 @@ static void	display_iphdr_fields(struct iphdr *iphdr)
 	printf("%x  ", iphdr->ihl);
 	printf("%.02x ", iphdr->tos);
 	printf("%.04x ", ntohs(iphdr->tot_len));
-	printf("%.04x   ", ntohs(iphdr->id));
+	printf("%x   ", ntohs(iphdr->id));
 	printf("%x ", ntohs(iphdr->frag_off) >> 13);
 	printf("%.04x  ", ntohs(iphdr->frag_off) & 0x1F00);
 	printf("%.02x  ", iphdr->ttl);
 	printf("%.02x ", iphdr->protocol);
-	printf("%.04x ", ntohs(iphdr->check));
+	printf("%x ", ntohs(iphdr->check));
 	printf("%d.%d.%d.%d  ", (saddr >> 24) & 0xFF, (saddr >> 16) & 0xFF, \
 		(saddr >> 8) & 0xFF, saddr & 0xFF);
 	printf("%d.%d.%d.%d\n", (daddr >> 24) & 0xFF, (daddr >> 16) & 0xFF, \
@@ -38,23 +38,22 @@ static void display_iphdr_dump(unsigned short *iphdr)
 	display_iphdr_fields((struct iphdr *)iphdr);
 }
 
-static void	display_icmp_hdr(struct icmphdr *icmphdr_request)
+static void	display_icmp_hdr(struct icmphdr *icmp_pckt_request)
 {
-	printf("ICMP: type %d, code %d, size %d, id 0x%.04x, seq 0x%.04x\n", \
-		icmphdr_request->type, icmphdr_request->code, \
-		ICMP_PCKT_SIZE, icmphdr_request->un.echo.id, \
-		icmphdr_request->un.echo.sequence);
+	printf("ICMP: type %d, code %d, size %d, id 0x%x, seq 0x%.04x\n", \
+		icmp_pckt_request->type, icmp_pckt_request->code, \
+		ICMP_PCKT_SIZE, icmp_pckt_request->un.echo.id, \
+		icmp_pckt_request->un.echo.sequence);
 }
 
-void	display_original_pckt(struct iphdr original_iphdr, \
-								struct icmphdr original_icmphdr)
+void	display_ip_hdr(t_icmp_pckt icmp_pckt_reply)
 {
 	unsigned short	*iphdr_request;
-	struct icmphdr	*icmphdr_request;
+	struct icmphdr	*icmp_pckt_request;
 
 	printf("IP Hdr Dump:\n");
-	iphdr_request = (unsigned short *)&original_iphdr;
-	icmphdr_request = (struct icmphdr *)&original_icmphdr;
+	iphdr_request = (unsigned short *)&icmp_pckt_reply + ICMP_HDR_SIZE / 2;
+	icmp_pckt_request = (struct icmphdr *)(iphdr_request + IP_HDR_SIZE / 2);
 	display_iphdr_dump(iphdr_request);
-	display_icmp_hdr(icmphdr_request);
+	display_icmp_hdr(icmp_pckt_request);
 }

@@ -13,9 +13,9 @@ static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 			get_source_addr(dest_addr_ip, dest_addr_struct->sin_addr.s_addr);
 			ping->stats.sent_pckt = 0;
 			ping->stats.received_pckt = 0;
-			send_echo_request(ping);
 			display_data_sent(*argv, dest_addr_ip, ping->verbose_mode, \
 				ping->echo_request.icmphdr.un.echo.id);
+			send_echo_request(ping);
 			display_transmission_stats(ping->stats.sent_pckt, \
 				ping->stats.received_pckt, *argv);
 		}
@@ -30,9 +30,9 @@ static void	first_sending(t_ping *ping, u_int8_t *status_flags, char *dest_addr_
 
 	dest_addr_struct = (struct sockaddr_in *)&ping->dest_addr;
 	get_source_addr(dest_addr_ip, dest_addr_struct->sin_addr.s_addr);
-	send_echo_request(ping);
 	display_data_sent(dest_addr_str, dest_addr_ip, ping->verbose_mode, \
 		ping->echo_request.icmphdr.un.echo.id);
+	send_echo_request(ping);
 	receive_echo_reply(ping);
 	if (*status_flags & VALID_ID && !(*status_flags & NO_BYTES_RECEIVED))
 		display_reply(ping);
@@ -56,6 +56,8 @@ static void	ping_loop(t_ping *ping, char *dest_addr_str)
 	display_sig();
 	if (g_sig_triggered == SIG_INT)
 		display_ping_stats(ping->stats, dest_addr_str);
+	if (!ping->stats.received_pckt)
+		ping->exit_status = 1;
 }
 
 void	run_ping(t_ping *ping, char **argv)

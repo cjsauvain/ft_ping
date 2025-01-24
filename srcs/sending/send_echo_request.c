@@ -35,7 +35,10 @@ void	send_echo_request(t_ping *ping)
 				process_checksum((unsigned short *)&ping->echo_request);
 	if (sendto(ping->send_socket, &ping->echo_request, ICMP_PCKT_SIZE, 0, \
 			&ping->dest_addr, sizeof(ping->dest_addr)) == - 1)
+	{
+		perror("ft_ping: sending packet");
 		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
+	}
 	ping->stats.sent_pckt++;
 	ping->echo_request.icmphdr.un.echo.sequence++;
 }
