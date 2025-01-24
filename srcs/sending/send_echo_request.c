@@ -27,15 +27,15 @@ static suseconds_t	initialize_icmp_data(char *data)
 
 void	send_echo_request(t_ping *ping)
 {
-	ping->stats.tv_request = initialize_icmp_data(ping->icmp_request.data);
+	ping->stats.tv_request = initialize_icmp_data(ping->echo_request.data);
 	if (ping->stats.tv_request == -1)
 		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
-	ping->icmp_request.icmphdr.checksum = 0;
-	ping->icmp_request.icmphdr.checksum = \
-				process_checksum((unsigned short *)&ping->icmp_request);
-	if (sendto(ping->send_socket, &ping->icmp_request, ICMP_PCKT_SIZE, 0, \
+	ping->echo_request.icmphdr.checksum = 0;
+	ping->echo_request.icmphdr.checksum = \
+				process_checksum((unsigned short *)&ping->echo_request);
+	if (sendto(ping->send_socket, &ping->echo_request, ICMP_PCKT_SIZE, 0, \
 			&ping->dest_addr, sizeof(ping->dest_addr)) == - 1)
 		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
 	ping->stats.sent_pckt++;
-	ping->icmp_request.icmphdr.un.echo.sequence++;
+	ping->echo_request.icmphdr.un.echo.sequence++;
 }

@@ -10,7 +10,7 @@ static void display_echo_reply_output(t_reply_pckt reply_pckt, t_ping_stats stat
 	icmp_pckt_size = ntohs(reply_pckt.iphdr.tot_len) - (reply_pckt.iphdr.ihl * 4);
 	printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%ld.%03ld ms\n",	\
 		icmp_pckt_size, source_addr, \
-		reply_pckt.icmp_pckt.icmphdr.un.echo.sequence, \
+		reply_pckt.echo_reply.icmphdr.un.echo.sequence, \
 		reply_pckt.iphdr.ttl, stats.tv_rtt / 1000, stats.tv_rtt % 1000);
 }
 

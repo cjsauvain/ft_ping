@@ -18,8 +18,13 @@ static void	process_icmp_error(struct icmphdr icmphdr_request, \
 	if (icmphdr_request.checksum == request_icmphdr_returned.checksum)
 		checksum_check = VALID_CHECKSUM;
 
-	*status_flags |= VALID_ID & id_check;
-	*status_flags |= VALID_CHECKSUM & checksum_check;
+	*status_flags &= ~ECHO_REPLY;
+	*status_flags = (id_check == VALID_ID) \
+						? (*status_flags | VALID_ID) \
+						: (*status_flags & ~VALID_ID);
+	*status_flags = (checksum_check == VALID_CHECKSUM) \
+						? (*status_flags | VALID_CHECKSUM) \
+						: (*status_flags & ~VALID_CHECKSUM);
 }
 
 static void	process_echo_reply(t_ping *ping)
@@ -30,13 +35,17 @@ static void	process_echo_reply(t_ping *ping)
 	int			status;
 
 	status_flags = &ping->reply_pckt.status_flags;
-	id_check = check_packet_id(ping->reply_pckt.icmp_pckt.icmphdr, \
-			ping->icmp_request.icmphdr);
-	checksum_check = check_checksum_reply(&ping->reply_pckt.icmp_pckt);
+	id_check = check_packet_id(ping->reply_pckt.echo_reply.icmphdr, \
+			ping->echo_request.icmphdr);
+	checksum_check = check_checksum_reply(&ping->reply_pckt.echo_reply);
 
 	*status_flags |= ECHO_REPLY;
-	*status_flags |= VALID_ID & id_check;
-	*status_flags |= VALID_CHECKSUM & checksum_check;
+	*status_flags = (id_check == VALID_ID) \
+						? (*status_flags | VALID_ID) \
+						: (*status_flags & ~VALID_ID);
+	*status_flags = (checksum_check == VALID_CHECKSUM) \
+						? (*status_flags | VALID_CHECKSUM) \
+						: (*status_flags & ~VALID_CHECKSUM);
 	if (*status_flags & VALID_ID && *status_flags & VALID_CHECKSUM)
 	{
 		status = update_timestamps(&ping->stats);
@@ -49,12 +58,9 @@ static void	process_echo_reply(t_ping *ping)
 
 void	process_reply(t_ping *ping)
 {
-	int	type;
-
-	type = ping->reply_pckt.icmp_pckt.icmphdr.type;
-	if (type != 0)
-		process_icmp_error(ping->icmp_request.icmphdr, \
-			ping->reply_pckt.request_icmphdr, &ping->reply_pckt.status_flags);
-	else
+	if (ping->reply_pckt.status_flags & ECHO_REPLY)
 		process_echo_reply(ping);
+	else
+		process_icmp_error(ping->echo_request.icmphdr, \
+			ping->reply_pckt.error_reply.original_icmphdr, &ping->reply_pckt.status_flags);
 }

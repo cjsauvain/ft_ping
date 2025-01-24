@@ -41,13 +41,14 @@ int	display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode)
 	u_int8_t	code;
 
 	icmp_pckt_size = ntohs(reply_pckt.iphdr.tot_len) - (reply_pckt.iphdr.ihl * 4);
-	type = reply_pckt.icmp_pckt.icmphdr.type;
-	code = reply_pckt.icmp_pckt.icmphdr.code;
+	type = reply_pckt.error_reply.icmphdr.type;
+	code = reply_pckt.error_reply.icmphdr.code;
 
 	if (display_bytes_from(reply_pckt.iphdr.saddr, icmp_pckt_size, type, code))
 		return -1;
 	if (verbose_mode == true)
-		display_ip_hdr(reply_pckt.icmp_pckt);
+		display_original_pckt(reply_pckt.error_reply.original_iphdr, \
+			reply_pckt.error_reply.original_icmphdr);
 	return 0;
 }
 

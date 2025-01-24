@@ -39,7 +39,7 @@ SRC_DISPLAY =	display_usage_message.c	\
 				display_ping_stats.c	\
 				display_data_sent.c		\
 				display_icmp_message.c	\
-				display_ip_hdr.c		\
+				display_original_pckt.c	\
 				display_sig.c			\
 
 SRC_ICMP_MESSAGES =	get_destination_unreachable_message.c 	\

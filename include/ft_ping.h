@@ -22,15 +22,16 @@
 # define	ICMP_DATA_SIZE		56
 # define	ICMP_PCKT_SIZE		64
 # define	IP_HDR_SIZE			20
-# define	ONE_SEC				1000000
+# define	WAIT				950000
 # define	RCV_TIMEOUT			999999
 # define	MAX_IPV4_LEN		16
 # define	BUFFER_SIZE			4096
 # define	ICMP_MESSAGE_MAXLEN	100
 
-# define VALID_ID		(1 << 0)
-# define VALID_CHECKSUM	(1 << 1)
-# define ECHO_REPLY		(1 << 2)
+# define VALID_ID			(1 << 0)
+# define VALID_CHECKSUM		(1 << 1)
+# define ECHO_REPLY			(1 << 2)
+# define NO_BYTES_RECEIVED	(1 << 3)
 
 typedef enum	s_sig_enum
 {
@@ -61,11 +62,18 @@ typedef struct s_icmp_pckt
 	char			data[ICMP_DATA_SIZE];
 }	t_icmp_pckt;
 
+typedef struct	s_icmp_error
+{
+	struct icmphdr	icmphdr;
+	struct iphdr	original_iphdr;
+	struct icmphdr	original_icmphdr;
+}	t_icmp_error;
+
 typedef struct s_reply_pckt
 {
-	t_icmp_pckt		icmp_pckt;
 	struct iphdr	iphdr;
-	struct icmphdr	request_icmphdr;
+	t_icmp_pckt		echo_reply;
+	t_icmp_error	error_reply;
 	u_int8_t		status_flags;
 }	t_reply_pckt;
 
@@ -73,7 +81,7 @@ typedef struct s_ping
 {
 	int					send_socket;
 	int					recv_socket;
-	t_icmp_pckt			icmp_request;
+	t_icmp_pckt			echo_request;
 	t_reply_pckt		reply_pckt;
 	struct sockaddr		dest_addr;
 	t_ping_stats		stats;
@@ -128,7 +136,8 @@ void    			display_help_and_exit(void);
 void				display_data_sent(char *dest_addr, char *dest_addr_ip, \
 						bool verbose_mode, u_int16_t echo_request_id);
 int 				display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode);
-void    			display_ip_hdr(t_icmp_pckt icmp_pckt_reply);
+void    			display_original_pckt(struct iphdr original_iphdr, \
+						struct icmphdr original_icmphdr);
 void    			display_sig(void);
 
 /********************/

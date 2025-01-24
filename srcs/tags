@@ -21,10 +21,10 @@ display_help_and_exit	display/display_usage_message.c	/^void	display_help_and_ex
 display_icmp_hdr	display/display_ip_hdr.c	/^static void	display_icmp_hdr(struct icmphdr *icmp_pckt_request)$/;"	f	file:
 display_icmp_message	display/display_icmp_message.c	/^int	display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode)$/;"	f
 display_invalid_option_and_exit	display/display_usage_message.c	/^void	display_invalid_option_and_exit(char *invalid_option)$/;"	f
-display_ip_hdr	display/display_ip_hdr.c	/^void	display_ip_hdr(t_icmp_pckt icmp_pckt_reply)$/;"	f
 display_iphdr_dump	display/display_ip_hdr.c	/^static void display_iphdr_dump(unsigned short *iphdr)$/;"	f	file:
 display_iphdr_fields	display/display_ip_hdr.c	/^static void	display_iphdr_fields(struct iphdr *iphdr)$/;"	f	file:
 display_missing_operand_and_exit	display/display_usage_message.c	/^void	display_missing_operand_and_exit(void)$/;"	f
+display_original_pckt	display/display_ip_hdr.c	/^void	display_original_pckt(t_icmp_pckt icmp_pckt_reply)$/;"	f
 display_ping_stats	display/display_ping_stats.c	/^void	display_ping_stats(t_ping_stats stats, char *dest_addr_str)$/;"	f
 display_reply	display/display_reply.c	/^void	display_reply(t_ping *ping)$/;"	f
 display_round_trip_stats	display/display_ping_stats.c	/^void	display_round_trip_stats(suseconds_t tv_min, suseconds_t tv_max, \\$/;"	f

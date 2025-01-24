@@ -2,15 +2,22 @@
 
 static void	extract_reply(t_reply_pckt *reply_pckt, char *buffer)
 {
+	struct icmphdr	icmphdr;
+
 	memcpy(&reply_pckt->iphdr, buffer, IP_HDR_SIZE);
-	memcpy(&reply_pckt->icmp_pckt.icmphdr, buffer + IP_HDR_SIZE, ICMP_HDR_SIZE);
-	if (reply_pckt->icmp_pckt.icmphdr.type == 0)
-		memcpy(&reply_pckt->icmp_pckt.data, \
-				buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_DATA_SIZE);
+	memcpy(&icmphdr, buffer + IP_HDR_SIZE, ICMP_HDR_SIZE);
+	if (icmphdr.type == 0)
+	{
+		reply_pckt->status_flags |= ECHO_REPLY;
+		reply_pckt->echo_reply.icmphdr = icmphdr;
+		memcpy(&reply_pckt->echo_reply.data, \
+			buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_DATA_SIZE);
+	}
 	else
 	{
-		memcpy(&reply_pckt->request_icmphdr, \
-				buffer + 2 * IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_HDR_SIZE);
+		reply_pckt->status_flags &= ~ECHO_REPLY;
+		memcpy(&reply_pckt->error_reply, \
+			buffer + IP_HDR_SIZE, IP_HDR_SIZE + 2 * ICMP_HDR_SIZE);
 	}
 }
 
@@ -23,9 +30,10 @@ static int	recv_ip_pckt(t_ping *ping)
 	bytes_received = recv(ping->recv_socket, buffer, BUFFER_SIZE, 0);
 	if (bytes_received == -1)
 	{
-		printf("bytes_received = %ld\n", bytes_received);
+		ping->reply_pckt.status_flags |= NO_BYTES_RECEIVED;
 		return -1;
 	}
+	ping->reply_pckt.status_flags &= ~NO_BYTES_RECEIVED;
 	extract_reply(&ping->reply_pckt, buffer);
 	return bytes_received;
 }
