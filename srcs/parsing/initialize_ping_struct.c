@@ -13,8 +13,9 @@ static t_reply_pckt	initialize_reply_pckt(void)
 	t_reply_pckt	reply_pckt;
 
 	memset(&reply_pckt.iphdr, 0, IP_HDR_SIZE);
-	memset(&reply_pckt.icmp_pckt.icmphdr, 0, ICMP_HDR_SIZE);
-	memset(&reply_pckt.icmp_pckt.data, 0, ICMP_DATA_SIZE);
+	reply_pckt.icmp_pckt = initialize_icmp_pckt();
+	memset(&reply_pckt.request_icmphdr, 0, ICMP_HDR_SIZE);
+	reply_pckt.status_flags = 0;
 
 	return reply_pckt;
 }
@@ -49,7 +50,7 @@ t_ping	initialize_ping_struct(void)
 {
 	t_ping	ping;
 
-	ping.icmp_pckt_request = initialize_icmp_pckt();
+	ping.icmp_request = initialize_icmp_pckt();
 	ping.reply_pckt = initialize_reply_pckt();
 	ping.dest_addr = initialize_dest_addr_struct();
 	ping.stats = initialize_ping_stats();

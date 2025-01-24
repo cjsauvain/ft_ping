@@ -1,6 +1,6 @@
 #include "ft_ping.h"
 
-int	check_checksum_reply(t_icmp_pckt *icmp_pckt)
+u_int8_t	check_checksum_reply(t_icmp_pckt *icmp_pckt)
 {
 	unsigned short	checksum_reply;
 	unsigned short	checksum_tmp;
@@ -9,7 +9,7 @@ int	check_checksum_reply(t_icmp_pckt *icmp_pckt)
 	icmp_pckt->icmphdr.checksum = 0;
 	checksum_reply = process_checksum((unsigned short *)icmp_pckt);
 	if (checksum_reply != checksum_tmp)
-		return 1;
+		return 0;
 	icmp_pckt->icmphdr.checksum = checksum_tmp;
-	return 0;
+	return VALID_CHECKSUM;
 }

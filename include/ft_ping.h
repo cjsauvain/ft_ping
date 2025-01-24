@@ -23,18 +23,14 @@
 # define	ICMP_PCKT_SIZE		64
 # define	IP_HDR_SIZE			20
 # define	ONE_SEC				1000000
-# define	RCV_TIMEOUT			200000
+# define	RCV_TIMEOUT			999999
 # define	MAX_IPV4_LEN		16
 # define	BUFFER_SIZE			4096
 # define	ICMP_MESSAGE_MAXLEN	100
 
-typedef enum	s_reply_status
-{
-	NO_BYTES_RECEIVED,
-	PCKT_RECEIVED,
-	ECHO_REPLY,
-	ID_VALID,
-}	t_reply_status;
+# define VALID_ID		(1 << 0)
+# define VALID_CHECKSUM	(1 << 1)
+# define ECHO_REPLY		(1 << 2)
 
 typedef enum	s_sig_enum
 {
@@ -65,26 +61,20 @@ typedef struct s_icmp_pckt
 	char			data[ICMP_DATA_SIZE];
 }	t_icmp_pckt;
 
-typedef struct	s_icmp_error
-{
-	struct iphdr	original_iphdr;
-	struct icmphdr	original_icmphdr;
-}	t_icmp_error;
-
 typedef struct s_reply_pckt
 {
-	struct iphdr	iphdr;
 	t_icmp_pckt		icmp_pckt;
-	t_icmp_error	icmp_error;
+	struct iphdr	iphdr;
+	struct icmphdr	request_icmphdr;
+	u_int8_t		status_flags;
 }	t_reply_pckt;
 
 typedef struct s_ping
 {
 	int					send_socket;
 	int					recv_socket;
-	t_icmp_pckt			icmp_pckt_request;
+	t_icmp_pckt			icmp_request;
 	t_reply_pckt		reply_pckt;
-	t_icmp_error		icmp_error;
 	struct sockaddr		dest_addr;
 	t_ping_stats		stats;
 	bool				verbose_mode;
@@ -118,9 +108,9 @@ void    			close_sockets(int send_socket, int recv_socket);
 /********************/
 /*	   RECEIVING	*/
 /********************/
-int					check_checksum_reply(t_icmp_pckt *icmp_pckt);
-t_reply_status		receive_echo_reply(t_ping *ping);
-t_reply_status  	process_reply(t_ping *ping);
+u_int8_t			check_checksum_reply(t_icmp_pckt *icmp_pckt);
+void				receive_echo_reply(t_ping *ping);
+void				process_reply(t_ping *ping);
 
 /********************/
 /*	   DISPLAY		*/
@@ -135,8 +125,7 @@ void    			display_round_trip_stats(suseconds_t tv_min, \
 void    			display_invalid_option_and_exit(char *invalid_option);
 void    			display_missing_operand_and_exit(void);
 void    			display_help_and_exit(void);
-void				display_data_sent(char *dest_addr, \
-						struct sockaddr_in *dest_addr_struct, \
+void				display_data_sent(char *dest_addr, char *dest_addr_ip, \
 						bool verbose_mode, u_int16_t echo_request_id);
 int 				display_icmp_message(t_reply_pckt reply_pckt, bool verbose_mode);
 void    			display_ip_hdr(t_icmp_pckt icmp_pckt_reply);
@@ -158,7 +147,7 @@ void    			get_parameter_problem_message(char *icmp_message, \
 /********************/
 /*		UTILS		*/
 /********************/
-void    			get_source_addr(char *buffer, unsigned int saddr);
+void				get_source_addr(char *buffer, unsigned int saddr);
 int					get_addr_struct(struct sockaddr *dest_addr_struct, char *dest_addr);
 unsigned short		process_checksum(unsigned short *icmp_pckt);
 

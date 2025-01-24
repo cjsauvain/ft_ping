@@ -9,9 +9,7 @@ static void	extract_reply(t_reply_pckt *reply_pckt, char *buffer)
 				buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_DATA_SIZE);
 	else
 	{
-		memcpy(&reply_pckt->icmp_error.original_iphdr, \
-				buffer + IP_HDR_SIZE + ICMP_HDR_SIZE, IP_HDR_SIZE);
-		memcpy(&reply_pckt->icmp_error.original_icmphdr, \
+		memcpy(&reply_pckt->request_icmphdr, \
 				buffer + 2 * IP_HDR_SIZE + ICMP_HDR_SIZE, ICMP_HDR_SIZE);
 	}
 }
@@ -24,34 +22,29 @@ static int	recv_ip_pckt(t_ping *ping)
 	memset(buffer, 0, BUFFER_SIZE);
 	bytes_received = recv(ping->recv_socket, buffer, BUFFER_SIZE, 0);
 	if (bytes_received == -1)
+	{
+		printf("bytes_received = %ld\n", bytes_received);
 		return -1;
+	}
 	extract_reply(&ping->reply_pckt, buffer);
 	return bytes_received;
 }
 
-t_reply_status	receive_echo_reply(t_ping *ping)
+void	receive_echo_reply(t_ping *ping)
 {
-	int				sig;
-	ssize_t			bytes_received;
-	t_reply_status	reply_status;
+	u_int8_t	*status_flags;
+	int			sig;
 
+	status_flags = &ping->reply_pckt.status_flags;
 	sig = 0;
-	bytes_received = -1;
-	while (!sig && bytes_received == -1)
+	while (!sig)
 	{
 		if (g_sig_triggered)
 			sig = 1;
-		bytes_received = recv_ip_pckt(ping);
-		if (bytes_received == -1)
-			return NO_BYTES_RECEIVED;
-		reply_status = process_reply(ping);
-		if (!(reply_status == ID_VALID))
-		{
-			bytes_received = -1;
-			continue ;
-		}
-		else if (reply_status == ID_VALID)
-		else if (reply_status == ID_VALID | ECHO_REPLY)
+		if (recv_ip_pckt(ping) == -1)
+			return ;
+		process_reply(ping);
+		if (*status_flags & VALID_ID)
+			return ;
 	}
-	return PCKT_RECEIVED;
 }

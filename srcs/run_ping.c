@@ -2,16 +2,20 @@
 
 static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 {
+	char				dest_addr_ip[MAX_IPV4_LEN];
+	struct sockaddr_in	*dest_addr_struct;
+
+	dest_addr_struct = (struct sockaddr_in *)&ping->dest_addr;
 	while (*argv)
 	{
 		if (*argv[0] != '-')
 		{
+			get_source_addr(dest_addr_ip, dest_addr_struct->sin_addr.s_addr);
 			ping->stats.sent_pckt = 0;
 			ping->stats.received_pckt = 0;
 			send_echo_request(ping);
-			display_data_sent(*argv, \
-				(struct sockaddr_in *)&ping->dest_addr, ping->verbose_mode, \
-				ping->icmp_pckt_request.icmphdr.un.echo.id);
+			display_data_sent(*argv, dest_addr_ip, ping->verbose_mode, \
+				ping->icmp_request.icmphdr.un.echo.id);
 			display_transmission_stats(ping->stats.sent_pckt, \
 				ping->stats.received_pckt, *argv);
 		}
@@ -19,23 +23,33 @@ static void	send_left_dest_addr_packets(t_ping *ping, char **argv)
 	}
 }
 
-static void	ping_loop(t_ping *ping, char *dest_addr_str)
+static void	first_sending(t_ping *ping, u_int8_t *status_flags, char *dest_addr_str)
 {
-	ssize_t	bytes_received;
+	char				dest_addr_ip[MAX_IPV4_LEN];
+	struct sockaddr_in	*dest_addr_struct;
 
+	dest_addr_struct = (struct sockaddr_in *)&ping->dest_addr;
+	get_source_addr(dest_addr_ip, dest_addr_struct->sin_addr.s_addr);
 	send_echo_request(ping);
-	display_data_sent(dest_addr_str, \
-		(struct sockaddr_in *)&ping->dest_addr, ping->verbose_mode, \
-		ping->icmp_pckt_request.icmphdr.un.echo.id);
-	bytes_received = receive_echo_reply(ping);
-	if (bytes_received != -1)
+	display_data_sent(dest_addr_str, dest_addr_ip, ping->verbose_mode, \
+		ping->icmp_request.icmphdr.un.echo.id);
+	receive_echo_reply(ping);
+	if (*status_flags & VALID_ID)
 		display_reply(ping);
 	usleep(ONE_SEC);
+}
+
+static void	ping_loop(t_ping *ping, char *dest_addr_str)
+{
+	u_int8_t	*status_flags;
+
+	status_flags = &ping->reply_pckt.status_flags;
+	first_sending(ping, status_flags, dest_addr_str);
 	while (g_sig_triggered == NO_SIGNAL)
 	{
 		send_echo_request(ping);
-		bytes_received = receive_echo_reply(ping);
-		if (bytes_received != -1)
+		receive_echo_reply(ping);
+		if (*status_flags & VALID_ID)
 			display_reply(ping);
 		usleep(ONE_SEC);
 	}
@@ -49,7 +63,7 @@ void	run_ping(t_ping *ping, char **argv)
 	create_sockets(&ping->send_socket, &ping->recv_socket);
 	if (get_addr_struct(&ping->dest_addr, *argv) == -1)
 		clean_exit(ping->send_socket, ping->recv_socket, ping->stats.rtt_list, 1);
-	ping->icmp_pckt_request.icmphdr = create_icmp_hdr();
+	ping->icmp_request.icmphdr = create_icmp_hdr();
 	ping_loop(ping, *argv);
 	send_left_dest_addr_packets(ping, argv + 1);
 	close_sockets(ping->send_socket, ping->recv_socket);
