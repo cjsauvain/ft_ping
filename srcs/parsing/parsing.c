@@ -36,5 +36,7 @@ t_ping	parsing(int argc, char **argv, int *first_addr_index)
 			*first_addr_index = i;
 		i++;
 	}
+	if (argc == 2 && ping.verbose_mode == true)
+		display_missing_operand_and_exit();
 	return ping;
 }
